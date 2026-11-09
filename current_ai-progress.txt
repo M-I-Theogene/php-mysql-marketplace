@@ -1,0 +1,24 @@
+
+prompt given:
+
+please i want you to firstly accoridngly to this email so we got the idea to initially have the site we can present if we are asked by the pawapay in case they ask us we made it but there are those document beng asked as you have seen the email such as description of the due diligence procedures and KYC/AML policies as you see we have @"/Vendor Due Diligence Procedures (Final).docx" and @"/~$ndor Due Diligence Procedures (Final).docx" on e.g Cypadi Shop (shop.cypadi.com) is an online marketplace in Rwanda. Independent sellers list products; customers purchase and pay by mobile money. this statewment from @"/~$ndor Due Diligence Procedures (Final).docx" stating that yes we have the domain of cypadi.com yes and the domain is ready but we don't yet have the api way yes the customers usually pay with mobile money when buying as nomal is this a good statemetn not only the whole 2 docs provided are they correctly align as we intend to submit the email todady but before submitting the email with these documents what are documents missinig needed
+
+
+5/8Create admin/sellers.php approval screen
+
+Add .gitignore
+
+Add seller KYC fields + approval gate (DB migration)
+
+Collect business/KYC details at seller signup
+
+Block unapproved sellers from the seller panel
+
+Create seller/pending.php notice page
+
+Create admin/sellers.php approval screen
+
+Align about-us / footer / terms / privacy with the chosen model
+
+Verify site loads and payment flow intact
+

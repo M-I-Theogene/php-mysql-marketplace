@@ -1,4 +1,4 @@
-<?php include 'check.php';
+<?php include 'init.php';
 
 $category_id = $query->validate($_GET['category']);
 $product_id = $query->select('products', 'id', 'where category_id = ' . $category_id);
@@ -119,14 +119,30 @@ $name = $query->select('categories', 'category_name', "where id = '$category_id'
 
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4 && xhr.status == 200) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Product added to cart!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        window.location.reload();
-                    });
+                    var data = {};
+                    try { data = JSON.parse(xhr.responseText); } catch (e) {}
+                    if (data.login) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Please log in',
+                            text: 'You need an account to add items to your cart.',
+                            confirmButtonText: 'Log in',
+                            confirmButtonColor: '#f1b301'
+                        }).then(function () {
+                            window.location.href = 'login/';
+                        });
+                        return;
+                    }
+                    if (data.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Product added to cart!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
                 }
             };
         }
@@ -139,14 +155,30 @@ $name = $query->select('categories', 'category_name', "where id = '$category_id'
 
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4 && xhr.status == 200) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Product added to wishlist!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        window.location.reload();
-                    });
+                    var data = {};
+                    try { data = JSON.parse(xhr.responseText); } catch (e) {}
+                    if (data.login) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Please log in',
+                            text: 'You need an account to save items to your wishlist.',
+                            confirmButtonText: 'Log in',
+                            confirmButtonColor: '#f1b301'
+                        }).then(function () {
+                            window.location.href = 'login/';
+                        });
+                        return;
+                    }
+                    if (data.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Product added to wishlist!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
                 }
             };
         }

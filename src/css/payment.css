@@ -1,0 +1,6 @@
+.payment-summary-box { background:#f7f7f7; padding:20px; border-radius:8px; }
+.provider-grid { display:flex; gap:12px; flex-wrap:wrap; }
+.provider-card { border:1px solid #ddd; padding:12px 16px; border-radius:8px; cursor:pointer; display:flex; align-items:center; gap:8px; }
+.provider-card input { margin-right:6px; }
+.payment-loading-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); align-items:center; justify-content:center; z-index:9999; }
+.payment-loading-box { background:#fff; padding:24px 32px; border-radius:8px; }

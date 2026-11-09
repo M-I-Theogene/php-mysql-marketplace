@@ -34,4 +34,13 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'seller') {
     exit;
 }
 
+// Products may only be listed by a seller Cypadi has reviewed and approved.
+$sellerRecord = $query->select('accounts', 'seller_status', 'WHERE id = "' . $_SESSION['id'] . '"');
+$sellerStatus = $sellerRecord[0]['seller_status'] ?? 'approved';
+
+if ($sellerStatus !== 'approved') {
+    header("Location: ./pending.php");
+    exit;
+}
+
 ?>

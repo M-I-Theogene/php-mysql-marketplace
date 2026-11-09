@@ -1,18 +1,29 @@
-<?php include 'check.php';
+<?php
+include 'init.php';
+header('Content-Type: application/json');
 
-if (isset($_GET['product_id']) && isset($_SESSION['id'])) {
-    $productId = $_GET['product_id'];
-    $quantity = isset($_GET['quantity']) ? $_GET['quantity'] : 1;
+if (empty($_SESSION['loggedin']) || empty($_SESSION['id'])) {
+    echo json_encode(['ok' => false, 'login' => true]);
+    exit;
+}
 
-    $userId = $_SESSION['id'];
+if (isset($_GET['product_id'])) {
+    $productId = (int) $_GET['product_id'];
+    $quantity = isset($_GET['quantity']) ? (int) $_GET['quantity'] : 1;
+    $userId = (int) $_SESSION['id'];
 
-    $cartData = array(
+    $cartData = [
         'user_id' => $userId,
         'product_id' => $productId,
-        'number_of_products' => $quantity
-    );
+        'number_of_products' => max(1, $quantity),
+    ];
 
-    if (!isset($query->select('cart', "id", "WHERE product_id = $productId AND user_id = $userId ")[0]['id'])) {
+    if (!isset($query->select('cart', 'id', "WHERE product_id = $productId AND user_id = $userId")[0]['id'])) {
         $query->insert('cart', $cartData);
     }
+
+    echo json_encode(['ok' => true]);
+    exit;
 }
+
+echo json_encode(['ok' => false]);

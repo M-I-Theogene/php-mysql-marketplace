@@ -1,4 +1,4 @@
-<?php include 'check.php'; ?>
+<?php include 'init.php'; ?>
 
 <!DOCTYPE html>
 <html lang="eng">
@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="./favicon.ico">
-    <title>iMarket | Home</title>
+    <title>Cypadi Shop | Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./src/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="./src/css/font-awesome.min.css" type="text/css">
@@ -219,14 +219,30 @@
 
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Product added to cart!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        window.location.reload();
-                    });
+                    var data = {};
+                    try { data = JSON.parse(xhr.responseText); } catch (e) {}
+                    if (data.login) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Please log in',
+                            text: 'You need an account to add items to your cart.',
+                            confirmButtonText: 'Log in',
+                            confirmButtonColor: '#f1b301'
+                        }).then(function () {
+                            window.location.href = 'login/';
+                        });
+                        return;
+                    }
+                    if (data.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Product added to cart!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
                 }
             };
         }
@@ -239,14 +255,30 @@
 
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4 && xhr.status == 200) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Product added to wishlist!',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        window.location.reload();
-                    });
+                    var data = {};
+                    try { data = JSON.parse(xhr.responseText); } catch (e) {}
+                    if (data.login) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Please log in',
+                            text: 'You need an account to save items to your wishlist.',
+                            confirmButtonText: 'Log in',
+                            confirmButtonColor: '#f1b301'
+                        }).then(function () {
+                            window.location.href = 'login/';
+                        });
+                        return;
+                    }
+                    if (data.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Product added to wishlist!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
                 }
             };
         }

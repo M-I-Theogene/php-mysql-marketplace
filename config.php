@@ -4,6 +4,9 @@ class Database
 {
     private $conn;
 
+    /** Guards the schema check so it runs once per request, not once per object. */
+    private static $migrated = false;
+
     public function __construct()
     {
         $servername = "localhost";
@@ -15,6 +18,15 @@ class Database
 
         if ($this->conn->connect_error) {
             die("Connection failed: " . $this->conn->connect_error);
+        }
+
+        // Every page reaches the database through this constructor, including
+        // /signup, /seller and /admin, which include config.php directly rather
+        // than init.php. Running the schema check here guarantees the seller KYC
+        // columns exist before the first seller registers on a fresh install.
+        if (!self::$migrated) {
+            marketplaceRunMigrations($this->conn);
+            self::$migrated = true;
         }
     }
 
@@ -86,7 +98,7 @@ class Database
         return $this->select($table, "*", $condition);
     }
 
-    public function registerUser($name, $number, $email, $username, $password, $role)
+    public function registerUser($name, $number, $email, $username, $password, $role, $profile = array())
     {
         $name = $this->validate($name);
         $number = $this->validate($number);
@@ -103,6 +115,21 @@ class Database
             'password' => $password_hash,
             'role' => $role
         );
+
+        // Seller onboarding profile: business details plus the review state.
+        $allowedProfileKeys = array('business_name', 'country', 'id_number');
+        foreach ($allowedProfileKeys as $key) {
+            if (!isset($profile[$key])) {
+                continue;
+            }
+            $value = $this->validate($profile[$key]);
+            if ($value !== '') {
+                $data[$key] = $value;
+            }
+        }
+
+        // A new seller is not allowed to list products until an admin approves.
+        $data['seller_status'] = ($role === 'seller') ? 'pending' : 'approved';
 
         $user_id = $this->insert('accounts', $data);
 
@@ -269,4 +296,12 @@ class Database
             return false;
         }
     }
+
+    public function getMysqli()
+    {
+        return $this->conn;
+    }
 }
+
+require_once __DIR__ . '/includes/env.php';
+require_once __DIR__ . '/includes/db-migrate.php';

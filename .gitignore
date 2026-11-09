@@ -1,0 +1,19 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Word lock files and documents
+~$*
+*.docx
+
+# Local dev / tooling
+.vscode/
+.specstory/
+.cursorindexingignore
+.DS_Store
+Thumbs.db
+
+# Uploads and runtime
+*.log
+/tmp/

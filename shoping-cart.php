@@ -99,8 +99,8 @@ $cartItems = $query->getCartItems($_SESSION['id']);
                                                 <h5><?php echo $item['name']; ?></h5>
                                             </td>
                                             <td class="shoping__cart__price">
-                                                <del>$<?php echo number_format($item['price_old'], 2); ?></del>
-                                                $<?php echo number_format($item['price_current'], 2); ?>
+                                                <del>RWF <?php echo number_format($item['price_old'], 0); ?></del>
+                                                RWF <?php echo number_format($item['price_current'], 0); ?>
                                             </td>
                                             <td class="shoping__cart__quantity">
                                                 <div class="quantity">
@@ -111,7 +111,7 @@ $cartItems = $query->getCartItems($_SESSION['id']);
                                                 </div>
                                             </td>
                                             <td class="shoping__cart__total">
-                                                $<?php echo number_format($item['total_price'], 2); ?>
+                                                RWF <?php echo number_format($item['total_price'], 0); ?>
                                             </td>
                                             <td class="shoping__cart__item__clo">
                                                 <span onclick="removeCartItem(<?php echo $item['id']; ?>)">
@@ -136,8 +136,8 @@ $cartItems = $query->getCartItems($_SESSION['id']);
                     <div class="shoping__checkout">
                         <h5>Cart Total</h5>
                         <ul>
-                            <li>Subtotal <span>$<?php echo number_format($total_price, 2); ?></span></li>
-                            <li>Total <span>$<?php echo number_format($total_price, 2); ?></span></li>
+                            <li>Subtotal <span>RWF <?php echo number_format($total_price, 0); ?></span></li>
+                            <li>Total <span>RWF <?php echo number_format($total_price, 0); ?></span></li>
                         </ul>
                         <a href="checkout.php" class="primary-btn">Proceed to Checkout</a>
                     </div>

@@ -1,0 +1,15 @@
+# Protect secrets and internal files from being served over HTTP.
+# Apache honours this; on Nginx add an equivalent `location` deny rule.
+
+<FilesMatch "^\.(env|git|htaccess|htpasswd|cursorindexingignore)">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "(^~\$|\.docx$|\.sql$|\.md$)">
+    Require all denied
+</FilesMatch>
+
+DirectoryIndex index.php index.html
+
+# Do not list directory contents.
+Options -Indexes

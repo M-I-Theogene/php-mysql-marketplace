@@ -1,14 +1,21 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
-$cartItems = $query->getCartItems($_SESSION['id']);
-$total_price = array_reduce($cartItems, function ($total, $item) {
-    return $total + $item['total_price'];
-}, 0);
+$cartItems = [];
+$total_price = 0;
+if (!empty($_SESSION['loggedin']) && !empty($_SESSION['id'])) {
+    $cartItems = $query->getCartItems((int) $_SESSION['id']);
+    $total_price = array_reduce($cartItems, function ($total, $item) {
+        return $total + $item['total_price'];
+    }, 0);
+}
 
 function countTable($table)
 {
     global $query;
-    $userId = $_SESSION['id'];
+    if (empty($_SESSION['id'])) {
+        return 0;
+    }
+    $userId = (int) $_SESSION['id'];
     $result = $query->executeQuery("SELECT COUNT(*) AS total_elements FROM $table WHERE user_id = $userId");
     $row = $result->fetch_assoc();
     return $row['total_elements'];
@@ -18,7 +25,7 @@ function countTable($table)
 <div class="humberger__menu__overlay"></div>
 <div class="humberger__menu__wrapper">
     <div class="humberger__menu__logo">
-        <a href="./"><img src="./src/images/logo.png" alt=""></a>
+        <a href="./"><img src="./assets/images/cypadi-shop.png" alt="Cypadi Shop" style="height: 80px; width: auto; max-width: 100%;"></a>
     </div>
     <div class="humberger__menu__cart">
         <ul>
@@ -27,11 +34,11 @@ function countTable($table)
             <li><a href="./shoping-cart.php"><i class="fa fa-shopping-bag"></i>
                     <span><?= countTable('cart'); ?></span></a></li>
         </ul>
-        <div class="header__cart__price">Total: <span>$<?= number_format($total_price, 2); ?></span></div>
+        <div class="header__cart__price">Total: <span>RWF <?= number_format($total_price, 0); ?></span></div>
     </div>
     <div class="humberger__menu__widget">
         <div class="header__top__right__auth">
-            <?php if ($_SESSION['loggedin']): ?>
+            <?php if (!empty($_SESSION['loggedin'])): ?>
                 <a href="#" onclick="logout()"><i class="fa fa-user"></i>Logout</a>
             <?php else: ?>
                 <a href="./login/"><i class="fa fa-user"></i>Login</a>
@@ -64,8 +71,8 @@ function countTable($table)
     </div>
     <div class="humberger__menu__contact">
         <ul>
-            <li><i class="fa fa-envelope"></i> iilhomjonov777@gmail.com </li>
-            <li>Free Shipping for all Orders over $99</li>
+            <li><i class="fa fa-envelope"></i> info@cypadi.com</li>
+            <li>Free delivery on orders over RWF 10,000</li>
         </ul>
     </div>
 </div>
@@ -77,8 +84,8 @@ function countTable($table)
                 <div class="col-lg-6">
                     <div class="header__top__left">
                         <ul>
-                            <li><i class="fa fa-envelope"></i> iilhomjonov777@gmail.com </li>
-                            <li>Free Shipping for all Orders over $99</li>
+                            <li><i class="fa fa-envelope"></i> info@cypadi.com</li>
+                            <li>Free delivery on orders over RWF 10,000</li>
                         </ul>
                     </div>
                 </div>
@@ -91,7 +98,7 @@ function countTable($table)
                             <a href="#"><i class="fa fa-pinterest-p"></i></a>
                         </div>
                         <div class="header__top__right__auth">
-                            <?php if ($_SESSION['loggedin']): ?>
+                            <?php if (!empty($_SESSION['loggedin'])): ?>
                                 <a href="#" onclick="logout()"><i class="fa fa-user"></i>Logout</a>
                             <?php else: ?>
                                 <a href="./login/"><i class="fa fa-user"></i>Login</a>
@@ -106,7 +113,7 @@ function countTable($table)
         <div class="row">
             <div class="col-lg-3">
                 <div class="header__logo">
-                    <a href="./"><img src="./src/images/logo.png" alt=""></a>
+                    <a href="./"><img src="./assets/images/cypadi-shop.png" alt="Cypadi Shop" style="height: 90px; width: auto; max-width: 100%;"></a>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -125,6 +132,10 @@ function countTable($table)
                             <a href="./shoping-cart.php"
                                 class="<?= ($currentPage == 'shoping-cart.php') ? 'active' : ''; ?>">Cart</a>
                         </li>
+
+                        <li>
+                            <a href="./my-orders.php" class="<?= ($currentPage == 'my-orders.php') ? 'active' : ''; ?>">My Orders</a>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -137,7 +148,7 @@ function countTable($table)
                         <li><a href="./shoping-cart.php"><i class="fa fa-shopping-bag"></i>
                                 <span><?= countTable('cart'); ?></span></a></li>
                     </ul>
-                    <div class="header__cart__price">Total: <span>$<?= number_format($total_price, 2); ?></span>
+                    <div class="header__cart__price">Total: <span>RWF <?= number_format($total_price, 0); ?></span>
                     </div>
                 </div>
             </div>
@@ -156,7 +167,7 @@ function countTable($table)
     }
 
     ul li a.active {
-        color: #7fad39 !important;
+        color: #f1b301 !important;
         font-weight: bold !important;
     }
 </style>
@@ -198,8 +209,8 @@ function countTable($table)
                             <i class="fa fa-phone"></i>
                         </div>
                         <div class="hero__search__phone__text">
-                            <h5>+998 (99) 779 99 33</h5>
-                            <span>support 24/7</span>
+                            <h5>+250 784 801 809</h5>
+                            <span>Cypadi Shop — Rwanda</span>
                         </div>
                     </div>
                 </div>

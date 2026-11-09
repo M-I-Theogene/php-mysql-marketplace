@@ -60,13 +60,39 @@ if (isset($_POST['submit'])) {
 
     $existingUser = $query->executeQuery("SELECT * FROM accounts WHERE username='$username' OR email='$email' OR number='$number'");
 
-    if ($existingUser->num_rows > 0) {
+    if (!in_array($role, ['user', 'seller'], true)) {
+        $msg = [
+            "title" => "Error!",
+            "text" => "Please choose a valid account type."
+        ];
+        $existingUser = null;
+    }
+
+    if (isset($existingUser) && $existingUser->num_rows > 0) {
         $msg = [
             "title" => "Error!",
             "text" => "Username, email, or phone number already exists."
         ];
-    } else {
-        $result = $query->registerUser($name, $number, $email, $username, $password, $role);
+    } elseif (isset($existingUser)) {
+        // Sellers must supply business details so Cypadi can review them
+        // before any product is listed.
+        $profile = [];
+        if ($role === 'seller') {
+            $profile['business_name'] = trim($_POST['business_name'] ?? '');
+            $profile['country'] = trim($_POST['country'] ?? '');
+            $profile['id_number'] = trim($_POST['id_number'] ?? '');
+            if ($profile['business_name'] === '' || $profile['country'] === '' || $profile['id_number'] === '') {
+                $msg = [
+                    "title" => "Error!",
+                    "text" => "Business name, country and national ID number are required for seller accounts."
+                ];
+                $existingUser = null;
+            }
+        }
+    }
+
+    if (isset($existingUser) && $existingUser !== null && empty($msg)) {
+        $result = $query->registerUser($name, $number, $email, $username, $password, $role, $profile ?? []);
         $userData = $query->executeQuery("SELECT * FROM accounts WHERE username='$username'")->fetch_assoc();
 
         if (!empty($result) && !empty($userData) && isset($userData['id'])) {
@@ -87,15 +113,19 @@ if (isset($_POST['submit'])) {
                 "icon" => "success"
             ];
 
-            if ($user[0]['role'] == 'admin') {
+            if ($role === 'admin') {
                 header("Location: ../admin/");
                 exit;
-            } else if ($user[0]['role'] == 'seller') {
+            }
+
+            if ($role === 'seller') {
+                // New sellers land on the panel, which explains the pending review.
                 header("Location: ../seller/");
-            } else {
-                header("Location: ../");
                 exit;
             }
+
+            header("Location: ../");
+            exit;
         } else {
             $msg = [
                 "title" => "Error!",
@@ -165,11 +195,31 @@ if (isset($_POST['submit'])) {
                 <label for="role" class="font-weight-bold">Role</label>
                 <select id="role" name="role" class="form-control" required>
                     <option value="" disabled selected>Select Role</option>
-                    <option value="user">User</option>
+                    <option value="user">Customer</option>
                     <option value="seller">Seller</option>
                 </select>
             </div>
 
+            <div id="seller-fields" style="display:none;">
+                <div class="form-group">
+                    <label for="business_name">Business Name *</label>
+                    <input type="text" name="business_name" id="business_name" placeholder="Business or trading name" maxlength="150">
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country of Operation *</label>
+                    <input type="text" name="country" id="country" placeholder="Rwanda" maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_number">National ID / Passport Number *</label>
+                    <input type="text" name="id_number" id="id_number" placeholder="Identity document number" maxlength="100">
+                </div>
+
+                <p class="error-message" style="color:#666;">
+                    Seller accounts are reviewed by Cypadi before products can be listed.
+                </p>
+            </div>
 
             <div class="form-group">
                 <label for="name">Email</label>
@@ -204,6 +254,22 @@ if (isset($_POST['submit'])) {
     </div>
 
     <script>
+        function toggleSellerFields() {
+            var roleField = document.getElementById('role');
+            var box = document.getElementById('seller-fields');
+            var isSeller = roleField.value === 'seller';
+            box.style.display = isSeller ? 'block' : 'none';
+            ['business_name', 'country', 'id_number'].forEach(function(id) {
+                var field = document.getElementById(id);
+                if (field) { field.required = isSeller; }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('role').addEventListener('change', toggleSellerFields);
+            toggleSellerFields();
+        });
+
         $('#file-input').on('change', function() {
             var fileName = $(this).val().split('\\').pop();
             $(this).next('.custom-file-label').html(fileName);

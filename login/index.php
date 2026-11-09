@@ -95,7 +95,7 @@ if (isset($_POST['submit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Cypadi Shop | Login</title>
     <link rel="icon" href="../favicon.ico">
     <link rel="stylesheet" href="../src/css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -115,6 +115,9 @@ if (isset($_POST['submit'])) {
 
 <body>
     <div class="form-container">
+        <div style="text-align:center;margin-bottom:20px;">
+            <img src="../assets/images/cypadi-shop.png" alt="Cypadi Shop" style="height:90px;width:auto;max-width:100%;">
+        </div>
         <h1>Login</h1>
         <form method="post" action="">
             <div class="form-group">
