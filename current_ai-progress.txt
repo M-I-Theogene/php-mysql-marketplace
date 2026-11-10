@@ -199,4 +199,30 @@ Verify all pages visually
 
 Report placeholders
 
- 
+
+then it becomed:
+
+1/4Enumerate remaining placeholders
+
+Both PDFs regenerated with gold rules
+
+Enumerate remaining placeholders
+
+Verify remaining pages
+
+Deliver verdict + reply email
+
+
+then it becomed:
+
+2/5Rebuild and reconvert both documents
+
+Added cantSplit + repeating header rows
+
+Wired row properties into table rendering
+
+Rebuild and reconvert both documents
+
+Re-render and verify all pages
+
+Deliver verdict + reply email

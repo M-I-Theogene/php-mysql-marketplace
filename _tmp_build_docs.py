@@ -274,8 +274,10 @@ def render_heading3(document, text):
     add_runs(paragraph, text, size=Pt(10.5), color=BRONZE, bold=True)
 
 
-def render_paragraph(document, text, small=False, align_center=False):
+def render_paragraph(document, text, small=False, align_center=False, space_before=0):
     paragraph = document.add_paragraph()
+    if space_before:
+        paragraph.paragraph_format.space_before = Pt(space_before)
     paragraph.paragraph_format.space_after = Pt(4 if small else 7)
     paragraph.paragraph_format.alignment = (
         WD_ALIGN_PARAGRAPH.CENTER if align_center else WD_ALIGN_PARAGRAPH.JUSTIFY
@@ -429,8 +431,8 @@ def render_signature(document):
     set_table_borders(stamp_table, STAMP_GREY, 8, "dashed")
     stamp_cell = stamp_table.rows[0].cells[0]
     stamp_cell.width = Cm(CONTENT_W_CM * 0.38)
-    stamp_table.rows[0].height = Pt(118)
-    stamp_table.rows[0].height_rule = WD_ROW_HEIGHT_RULE.EXACTLY
+    stamp_table.rows[0].height = Pt(104)
+    stamp_table.rows[0].height_rule = WD_ROW_HEIGHT_RULE.AT_LEAST
     vertical_center(stamp_cell)
     label = stamp_cell.paragraphs[0]
     label.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -643,7 +645,7 @@ class BlockParser(HTMLParser):
         elif tag == "li":
             self._flush()
             if self.item is not None and self.items is not None:
-                text = clean_text(" ".join(self.item))
+                text = clean_text("".join(self.item))
                 if text:
                     self.items.append(text)
             self.item = None
@@ -655,7 +657,7 @@ class BlockParser(HTMLParser):
             if self.row is not None:
                 self.row.append(
                     {
-                        "text": clean_text(" ".join(self.cell or [])),
+                        "text": clean_text("".join(self.cell or [])),
                         "label": self.cell_label,
                         "head": self.cell_head,
                         "style": self.cell_style,
@@ -713,6 +715,7 @@ def parse_blocks(path):
 
 
 def render_blocks(document, blocks):
+    previous = None
     for block in blocks:
         kind = block["type"]
         if kind == "title":
@@ -726,7 +729,12 @@ def render_blocks(document, blocks):
         elif kind == "h3":
             render_heading3(document, block["text"])
         elif kind == "p":
-            render_paragraph(document, block["text"], small=block.get("small", False))
+            render_paragraph(
+                document,
+                block["text"],
+                small=block.get("small", False),
+                space_before=20 if previous == "signature" else 0,
+            )
         elif kind == "ul":
             render_bullets(document, block["items"])
         elif kind == "table":
@@ -737,6 +745,7 @@ def render_blocks(document, blocks):
             paragraph.add_run().add_break(WD_BREAK.PAGE)
         elif kind == "signature":
             render_signature(document)
+        previous = kind
 
 
 def collect_placeholders(blocks):

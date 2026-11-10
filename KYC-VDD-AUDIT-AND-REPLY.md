@@ -5,6 +5,35 @@
 
 ---
 
+## 0. Status — what exists now
+
+The finding in section 1 below describes the **two original files exactly as Cypadi sent them to me**. Both documents have since been rewritten and rebuilt. The current deliverables are:
+
+| File | Pages | Format |
+|---|---|---|
+| `pawapay-documents/Cypadi Ltd - KYC and AML Policy - CYP-AML-001 v1.1.docx` | 7 | Working master, editable |
+| `pawapay-documents/Cypadi Ltd - KYC and AML Policy - CYP-AML-001 v1.1.pdf` | 7 | For review |
+| `pawapay-documents/Cypadi Ltd - Vendor Due Diligence Procedures - CYP-VDD-001 v1.1.docx` | 8 | Working master, editable |
+| `pawapay-documents/Cypadi Ltd - Vendor Due Diligence Procedures - CYP-VDD-001 v1.1.pdf` | 8 | For review |
+
+Verified inside both `.docx` archives, not just by eye:
+
+| Element | KYC policy | VDD procedures |
+|---|---|---|
+| Company logo in the page header (`word/media/image1.png`, 76 pt wide) | present | present |
+| Header on every page (`word/header1.xml`) | present | present |
+| Footer with "Page X of Y" (`word/footer1.xml`, PAGE + NUMPAGES fields) | present | present |
+| Document-control table (entity, RDB, TIN, address, owner, approver, review date, classification) | present | present |
+| Version-history table | present | present |
+| Signature block — name, title, signature line, date | present | present |
+| Reserved dashed box marked "COMPANY STAMP" | present | present |
+
+All 15 pages were rendered to image and inspected one by one: the gold rules, the dark table headers, the alternating-row shading, the repeated table header rows across page breaks, the logo header and the footer page numbers all reach the PDF correctly in both documents.
+
+**What the build cannot do for you:** the stamp box is an empty outline. A real company seal has to be applied physically, and the MD has to sign by hand. See section 3.
+
+---
+
 ## 1. Direct answers to your three questions
 
 ### Does the KYC and AML Policy have the company logo? — NO
@@ -110,27 +139,39 @@ That scanned, signed, stamped PDF is the strongest form the document can take. K
 
 ---
 
-## 4. Exact checklist to fix both documents
+## 4. Checklist status
 
-Both documents:
+Both documents, done and verified in the generated files:
 
-- [ ] Cypadi logo in the page header, on every page. Use `https://cypadi.com/logo/cypadi_trancyparent_logo.png` at about 74 pt wide.
-- [ ] A document-control table at the top: legal entity **CYPADI LTD**, RDB number, **TIN**, registered address, document reference, version, effective date, owner, approver, next review date, classification.
-- [ ] A version-history table (1.0 → 1.1).
-- [ ] A footer with "Cypadi Ltd | document title | Internal – Confidential" and **Page X of Y**.
-- [ ] A signature block: name, title, signature line, date, and a **dashed box marked "COMPANY STAMP"**.
-- [ ] The placeholders below, filled in before printing.
+- [x] Cypadi logo in the page header, on every page. Built from `assets/images/cypadi-logo-transparent.png` (the cypadi.com file), 76 pt wide.
+- [x] Document-control table at the top: legal entity **CYPADI LTD**, RDB number, **TIN**, registered address, document reference, version, effective date, owner, approver, next review date, classification.
+- [x] Version-history table (1.0 → 1.1).
+- [x] Footer with "Cypadi Ltd | document title | Internal – Confidential" and **Page X of Y**, as live fields.
+- [x] Signature block: name, title, signature line, date, and a **dashed box marked "COMPANY STAMP"**.
+- [x] Substance rewrite: Rwandan law cited, CDD/EDD thresholds, PEP and sanctions screening, risk rating with re-review intervals, daily monitoring indicators, STR reporting to the FIC, five-year retention, vendor settlement rule stated in full, refusal/suspension/termination consequences, staff training, review cycle.
 
-Placeholders you must supply:
+Still open — **only you can do these**, the build cannot:
 
-| Placeholder | Value |
-|---|---|
-| `[[TIN]]` | your RRA Tax Identification Number |
-| `[[RDB_NUMBER]]` | your RDB registration number |
-| `[[REGISTERED_ADDRESS]]` | your registered address in Kigali |
-| `[[MD_NAME]]` | full name of the Managing Director |
-| `[[COMPLIANCE_OFFICER]]`, `[[CO_PHONE]]` | the named Compliance Officer and phone number |
-| `[[EFFECTIVE_DATE]]`, `[[SIGN_DATE]]` | the date you sign |
+- [ ] Fill the eight placeholders below and rebuild, or type over them in Word.
+- [ ] Print both, MD signs by hand, apply the real company stamp in the box.
+- [ ] Scan back to PDF at 300 dpi and send the scanned PDF.
+
+### The eight placeholders in both files
+
+They are printed in dark red bold so they cannot be missed. Nothing else in either document is unfinished.
+
+| Placeholder | Appears in | Value you must supply |
+|---|---|---|
+| `[[RDB_NUMBER]]` | KYC §Document control, VDD §Document control | Your RDB company registration number |
+| `[[TIN]]` | KYC §Document control, VDD §Document control | Your RRA Tax Identification Number |
+| `[[REGISTERED_ADDRESS]]` | KYC §Document control, VDD §Document control | Your registered address in Kigali |
+| `[[MD_NAME]]` | KYC §Document control and signature block; VDD likewise | Full name of the Managing Director |
+| `[[COMPLIANCE_OFFICER]]` | KYC §Document control and §4 Governance; VDD likewise | Full name of the named Compliance Officer |
+| `[[CO_PHONE]]` | KYC §Document control and §4 Governance; VDD likewise | That officer's mobile number |
+| `[[EFFECTIVE_DATE]]` | KYC §Document control and version history; VDD likewise | Date the policy takes effect |
+| `[[SIGN_DATE]]` | KYC signature block; VDD signature block | Date the MD signs |
+
+To fill them in one pass, edit `_tmp_build_docs.py` — set the values in a dictionary and substitute before saving — or simply open each `.docx` and use Word's Find and Replace eight times. Then re-export to PDF.
 
 ---
 
