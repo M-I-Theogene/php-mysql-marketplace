@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../init.php';
+require_once __DIR__ . '/../includes/kyc-upload.php';
 
 if (empty($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header('Location: ../login/');
@@ -13,12 +14,23 @@ if (($_SESSION['role'] ?? '') !== 'seller') {
 
 $account = $query->select(
     'accounts',
-    'name, business_name, seller_status, kyc_note',
+    'name, business_name, seller_status, kyc_note, id_number, id_document',
     'WHERE id = "' . (int) $_SESSION['id'] . '"'
 );
 $account = $account[0] ?? [];
 $status = $account['seller_status'] ?? 'pending';
 $businessName = $account['business_name'] ?? '';
+$identityNumber = $account['id_number'] ?? '';
+$documentName = $account['id_document'] ?? '';
+// The row outlives the file when it was restored from an older dump, so the
+// page states which of the two is missing instead of offering a dead link.
+$documentAvailable = $documentName !== '' && kycDocumentAvailable($documentName);
+$documentUrl = $documentAvailable ? kycDocumentUrl($documentName) : '';
+
+// One-shot notices written by upload-document.php.
+$documentError = $_SESSION['kyc_document_error'] ?? '';
+$documentSuccess = $_SESSION['kyc_document_success'] ?? '';
+unset($_SESSION['kyc_document_error'], $_SESSION['kyc_document_success']);
 
 if ($status === 'approved') {
     header('Location: ./');
@@ -50,6 +62,13 @@ if ($status === 'approved') {
                         Hello <?= htmlspecialchars($account['name'] ?? 'there'); ?>,
                     </p>
 
+                    <?php if ($documentSuccess !== ''): ?>
+                        <div class="alert alert-success"><?= htmlspecialchars($documentSuccess); ?></div>
+                    <?php endif; ?>
+                    <?php if ($documentError !== ''): ?>
+                        <div class="alert alert-danger"><?= htmlspecialchars($documentError); ?></div>
+                    <?php endif; ?>
+
                     <?php if ($status === 'rejected'): ?>
                         <p>
                             We could not approve the seller account<?= $businessName !== '' ? ' for <strong>' . htmlspecialchars($businessName) . '</strong>' : ''; ?>.
@@ -76,8 +95,41 @@ if ($status === 'approved') {
 
                     <ul class="list-unstyled mt-4">
                         <li><strong>Business name:</strong> <?= htmlspecialchars($businessName !== '' ? $businessName : '—'); ?></li>
+                        <li><strong>ID / passport number:</strong> <?= htmlspecialchars($identityNumber !== '' ? $identityNumber : '—'); ?></li>
+                        <li>
+                            <strong>Identity document:</strong>
+                            <?php if ($documentUrl !== ''): ?>
+                                <a href="<?= htmlspecialchars($documentUrl); ?>" target="_blank" rel="noopener">View what you sent</a>
+                            <?php elseif ($documentName !== ''): ?>
+                                <span class="text-danger">
+                                    The file you sent is no longer stored on our server — please upload it again below.
+                                </span>
+                            <?php else: ?>
+                                <span class="text-danger">Not provided — please upload it below.</span>
+                            <?php endif; ?>
+                        </li>
                         <li><strong>Account status:</strong> <?= $status === 'rejected' ? 'Not approved' : 'Awaiting review'; ?></li>
                     </ul>
+
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <?= $documentAvailable ? 'Send a different identity document' : 'Upload your identity document'; ?>
+                            </h5>
+                            <p class="text-muted">
+                                A clear photo or scan of the national ID or passport shown above. JPG, PNG, WEBP or
+                                PDF, up to 5 MB. Sending a document puts your application back in the review queue.
+                            </p>
+                            <form method="post" action="upload-document.php" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="id_document">Identity document *</label>
+                                    <input type="file" name="id_document" id="id_document" class="form-control-file"
+                                        accept="image/jpeg,image/png,image/webp,application/pdf" required>
+                                </div>
+                                <button type="submit" class="btn btn-dark">Upload document</button>
+                            </form>
+                        </div>
+                    </div>
 
                     <div class="mt-4">
                         <a href="../index.php" class="primary-btn">Continue shopping</a>

@@ -1,4 +1,8 @@
 <?php
+// Root-relative base so the links below also work when this header is included
+// from a subdirectory (for example seller/pending.php includes it as ../includes/header.php).
+$base = appBaseUrl() . '/';
+
 $currentPage = basename($_SERVER['PHP_SELF']);
 $cartItems = [];
 $total_price = 0;
@@ -25,13 +29,13 @@ function countTable($table)
 <div class="humberger__menu__overlay"></div>
 <div class="humberger__menu__wrapper">
     <div class="humberger__menu__logo">
-        <a href="./"><img src="./assets/images/cypadi-shop.png" alt="Cypadi Shop" style="height: 80px; width: auto; max-width: 100%;"></a>
+        <a href="<?= $base; ?>"><img src="<?= $base; ?>assets/images/cypadi-shop.png" alt="Cypadi Shop" style="height: 80px; width: auto; max-width: 100%;"></a>
     </div>
     <div class="humberger__menu__cart">
         <ul>
-            <li><a href="./heart.php"><i class="fa fa-heart"></i> <span><?= countTable('wishes'); ?></span></a>
+            <li><a href="<?= $base; ?>heart.php"><i class="fa fa-heart"></i> <span><?= countTable('wishes'); ?></span></a>
             </li>
-            <li><a href="./shoping-cart.php"><i class="fa fa-shopping-bag"></i>
+            <li><a href="<?= $base; ?>shoping-cart.php"><i class="fa fa-shopping-bag"></i>
                     <span><?= countTable('cart'); ?></span></a></li>
         </ul>
         <div class="header__cart__price">Total: <span>RWF <?= number_format($total_price, 0); ?></span></div>
@@ -41,23 +45,23 @@ function countTable($table)
             <?php if (!empty($_SESSION['loggedin'])): ?>
                 <a href="#" onclick="logout()"><i class="fa fa-user"></i>Logout</a>
             <?php else: ?>
-                <a href="./login/"><i class="fa fa-user"></i>Login</a>
+                <a href="<?= $base; ?>login/"><i class="fa fa-user"></i>Login</a>
             <?php endif; ?>
         </div>
     </div>
     <nav class="humberger__menu__nav mobile-menu">
         <ul>
             <li>
-                <a href="./" class="<?= ($currentPage == 'index.php') ? 'active' : ''; ?>">Home</a>
+                <a href="<?= $base; ?>" class="<?= ($currentPage == 'index.php') ? 'active' : ''; ?>">Home</a>
             </li>
 
             <li>
-                <a href="./heart.php" class="<?= ($currentPage == 'heart.php') ? 'active' : ''; ?>">Wish
+                <a href="<?= $base; ?>heart.php" class="<?= ($currentPage == 'heart.php') ? 'active' : ''; ?>">Wish
                     List</a>
             </li>
 
             <li>
-                <a href="./shoping-cart.php"
+                <a href="<?= $base; ?>shoping-cart.php"
                     class="<?= ($currentPage == 'shoping-cart.php') ? 'active' : ''; ?>">Cart</a>
             </li>
         </ul>
@@ -101,7 +105,7 @@ function countTable($table)
                             <?php if (!empty($_SESSION['loggedin'])): ?>
                                 <a href="#" onclick="logout()"><i class="fa fa-user"></i>Logout</a>
                             <?php else: ?>
-                                <a href="./login/"><i class="fa fa-user"></i>Login</a>
+                                <a href="<?= $base; ?>login/"><i class="fa fa-user"></i>Login</a>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -113,28 +117,28 @@ function countTable($table)
         <div class="row">
             <div class="col-lg-3">
                 <div class="header__logo">
-                    <a href="./"><img src="./assets/images/cypadi-shop.png" alt="Cypadi Shop" style="height: 90px; width: auto; max-width: 100%;"></a>
+                    <a href="<?= $base; ?>"><img src="<?= $base; ?>assets/images/cypadi-shop.png" alt="Cypadi Shop" style="height: 90px; width: auto; max-width: 100%;"></a>
                 </div>
             </div>
             <div class="col-lg-6">
                 <nav class="header__menu">
                     <ul>
                         <li>
-                            <a href="./" class="<?= ($currentPage == 'index.php') ? 'active' : ''; ?>">Home</a>
+                            <a href="<?= $base; ?>" class="<?= ($currentPage == 'index.php') ? 'active' : ''; ?>">Home</a>
                         </li>
 
                         <li>
-                            <a href="./heart.php" class="<?= ($currentPage == 'heart.php') ? 'active' : ''; ?>">Wish
+                            <a href="<?= $base; ?>heart.php" class="<?= ($currentPage == 'heart.php') ? 'active' : ''; ?>">Wish
                                 List</a>
                         </li>
 
                         <li>
-                            <a href="./shoping-cart.php"
+                            <a href="<?= $base; ?>shoping-cart.php"
                                 class="<?= ($currentPage == 'shoping-cart.php') ? 'active' : ''; ?>">Cart</a>
                         </li>
 
                         <li>
-                            <a href="./my-orders.php" class="<?= ($currentPage == 'my-orders.php') ? 'active' : ''; ?>">My Orders</a>
+                            <a href="<?= $base; ?>my-orders.php" class="<?= ($currentPage == 'my-orders.php') ? 'active' : ''; ?>">My Orders</a>
                         </li>
                     </ul>
                 </nav>
@@ -143,9 +147,9 @@ function countTable($table)
             <div class="col-lg-3">
                 <div class="header__cart">
                     <ul>
-                        <li><a href="./heart.php"><i class="fa fa-heart"></i>
+                        <li><a href="<?= $base; ?>heart.php"><i class="fa fa-heart"></i>
                                 <span><?= countTable('wishes'); ?></span></a></li>
-                        <li><a href="./shoping-cart.php"><i class="fa fa-shopping-bag"></i>
+                        <li><a href="<?= $base; ?>shoping-cart.php"><i class="fa fa-shopping-bag"></i>
                                 <span><?= countTable('cart'); ?></span></a></li>
                     </ul>
                     <div class="header__cart__price">Total: <span>RWF <?= number_format($total_price, 0); ?></span>
@@ -187,7 +191,7 @@ function countTable($table)
                         foreach ($categories as $category): ?>
                             <li>
                                 <a
-                                    href="category.php?category=<?= $category['id']; ?>"><?= $category['category_name'] ?></a>
+                                    href="<?= $base; ?>category.php?category=<?= $category['id']; ?>"><?= $category['category_name'] ?></a>
                             </li>
                         <?php endforeach; ?>
                     </ul>
@@ -235,7 +239,7 @@ function countTable($table)
             cancelButtonText: 'Cancel'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = './logout/';
+                window.location.href = '<?= $base; ?>logout/';
             }
         });
     }

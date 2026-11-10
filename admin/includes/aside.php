@@ -1,5 +1,8 @@
 <?php function active($Page, $Menu)
-{ ?>
+{
+    // The badge count is computed by admin/check.php, outside this function's scope.
+    $pendingSellers = isset($GLOBALS['pendingSellers']) ? (int) $GLOBALS['pendingSellers'] : 0;
+    ?>
 
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <a href="./" class="brand-link">
@@ -31,9 +34,14 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="./" class="nav-link <?php echo ($Menu === 'sellers') ? 'active' : ''; ?>">
+                                <a href="./sellers.php" class="nav-link <?php echo ($Menu === 'sellers') ? 'active' : ''; ?>">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Seller</p>
+                                    <p>
+                                        Sellers
+                                        <?php if ($pendingSellers > 0): ?>
+                                            <span class="badge badge-warning right"><?php echo $pendingSellers; ?></span>
+                                        <?php endif; ?>
+                                    </p>
                                 </a>
                             </li>
                         </ul>

@@ -1,5 +1,19 @@
 <?php
 
+/** Pepper used by the HMAC-SHA256 password scheme. */
+const PASSWORD_PEPPER = 'iqbolshoh';
+
+/**
+ * Hashes a plain password for storage in `accounts.password`.
+ *
+ * Kept as a global function so the schema migrations, which only receive a
+ * mysqli handle, can seed accounts with a hash the login can verify.
+ */
+function marketplaceHashPassword($password)
+{
+    return hash_hmac('sha256', (string) $password, PASSWORD_PEPPER);
+}
+
 class Database
 {
     private $conn;
@@ -46,6 +60,16 @@ class Database
         return $value;
     }
 
+    /**
+     * Escapes a value for SQL without HTML-encoding it.
+     * Use this for stored data that is escaped again with htmlspecialchars()
+     * when it is displayed, so an ampersand is not stored in encoded form.
+     */
+    public function escape($value)
+    {
+        return mysqli_real_escape_string($this->conn, trim((string) $value));
+    }
+
     public function executeQuery($sql)
     {
         $result = $this->conn->query($sql);
@@ -88,14 +112,83 @@ class Database
 
     public function hashPassword($password)
     {
-        return hash_hmac('sha256', $password, 'iqbolshoh');
+        return marketplaceHashPassword($password);
     }
 
+    /**
+     * Checks a plain password against a stored hash.
+     *
+     * The application stores HMAC-SHA256 hashes, but rows edited by hand
+     * (or seeded scripts) sometimes hold a plain MD5 or a password_hash()
+     * value. All three are accepted so a manually reset password still works.
+     */
+    public function verifyPassword($password, $storedHash)
+    {
+        $storedHash = trim((string) $storedHash);
+
+        if ($storedHash === '') {
+            return false;
+        }
+
+        if (hash_equals($this->hashPassword($password), $storedHash)) {
+            return true;
+        }
+
+        if (preg_match('/^[a-f0-9]{32}$/i', $storedHash) && hash_equals(strtolower($storedHash), md5($password))) {
+            return true;
+        }
+
+        if (strlen($storedHash) > 50 && password_verify($password, $storedHash)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Logs a user in by username OR email address.
+     *
+     * The row is fetched by identifier first and the password is then checked
+     * in PHP, because the stored hash may not follow the current scheme.
+     */
     public function authenticate($username, $password, $table)
     {
-        $username = $this->validate($username);
-        $condition = "WHERE username = '" . $username . "' AND password = '" . $this->hashPassword($password) . "'";
-        return $this->select($table, "*", $condition);
+        $login = $this->escape((string) $username);
+        $condition = "WHERE username = '" . $login . "' OR email = '" . $login . "'";
+        $rows = $this->select($table, "*", $condition);
+
+        if (empty($rows)) {
+            return array();
+        }
+
+        foreach ($rows as $row) {
+            if (!$this->verifyPassword($password, isset($row['password']) ? $row['password'] : '')) {
+                continue;
+            }
+
+            $this->upgradePasswordHash($table, $row, $password);
+
+            return array($row);
+        }
+
+        return array();
+    }
+
+    /**
+     * Replaces a legacy MD5 / password_hash() value with the current scheme
+     * after a successful login, so old rows migrate themselves.
+     */
+    private function upgradePasswordHash($table, array $row, $password)
+    {
+        $expectedHash = $this->hashPassword($password);
+
+        if (hash_equals($expectedHash, (string) $row['password'])) {
+            return;
+        }
+
+        $this->executeQuery(
+            "UPDATE $table SET password = '" . $expectedHash . "' WHERE id = " . (int) $row['id']
+        );
     }
 
     public function registerUser($name, $number, $email, $username, $password, $role, $profile = array())
@@ -116,13 +209,14 @@ class Database
             'role' => $role
         );
 
-        // Seller onboarding profile: business details plus the review state.
-        $allowedProfileKeys = array('business_name', 'country', 'id_number');
+        // Seller onboarding profile: business details, the uploaded identity
+        // document, plus the review state.
+        $allowedProfileKeys = array('business_name', 'country', 'id_number', 'id_document');
         foreach ($allowedProfileKeys as $key) {
             if (!isset($profile[$key])) {
                 continue;
             }
-            $value = $this->validate($profile[$key]);
+            $value = $this->escape($profile[$key]);
             if ($value !== '') {
                 $data[$key] = $value;
             }
@@ -301,6 +395,38 @@ class Database
     {
         return $this->conn;
     }
+}
+
+/**
+ * Absolute URL path of the application root, e.g. "/shopping" or "".
+ *
+ * The shared header and footer are included from subdirectories (for example
+ * seller/pending.php includes ../includes/header.php), where a page-relative
+ * link such as "./logout/" would resolve to /seller/logout/ and 404.
+ */
+function appBaseUrl()
+{
+    static $base = null;
+
+    if ($base !== null) {
+        return $base;
+    }
+
+    $documentRoot = isset($_SERVER['DOCUMENT_ROOT']) ? realpath($_SERVER['DOCUMENT_ROOT']) : false;
+    $appRoot = realpath(dirname(__FILE__));
+
+    if ($documentRoot && $appRoot) {
+        $documentRoot = str_replace('\\', '/', $documentRoot);
+        $appRoot = str_replace('\\', '/', $appRoot);
+
+        if (strpos($appRoot, $documentRoot) === 0) {
+            $base = rtrim(substr($appRoot, strlen($documentRoot)), '/');
+            return $base;
+        }
+    }
+
+    $base = '';
+    return $base;
 }
 
 require_once __DIR__ . '/includes/env.php';

@@ -1,8 +1,16 @@
 <?php include 'init.php'; ?>
 
 <?php
-$product_id = $query->validate($_GET['product_id']);
-if (!is_numeric($product_id) or $query->select('products', 'id', 'where id = ' . $product_id)[0]['id'] !== $product_id) {
+// Validate before querying: a missing or non-numeric id must not reach the
+// database, where it would produce a SQL syntax error.
+$product_id = $_GET['product_id'] ?? '';
+if (!is_numeric($product_id)) {
+    header("Location: ./");
+    exit;
+}
+
+$product_id = $query->validate($product_id);
+if (empty($query->select('products', 'id', 'where id = ' . $product_id))) {
     header("Location: ./");
     exit;
 }

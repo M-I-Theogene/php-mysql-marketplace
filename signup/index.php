@@ -2,6 +2,8 @@
 session_start();
 
 include '../config.php';
+require_once __DIR__ . '/../includes/kyc-upload.php';
+require_once __DIR__ . '/../includes/countries.php';
 $query = new Database();
 
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
@@ -81,12 +83,35 @@ if (isset($_POST['submit'])) {
             $profile['business_name'] = trim($_POST['business_name'] ?? '');
             $profile['country'] = trim($_POST['country'] ?? '');
             $profile['id_number'] = trim($_POST['id_number'] ?? '');
+
             if ($profile['business_name'] === '' || $profile['country'] === '' || $profile['id_number'] === '') {
                 $msg = [
                     "title" => "Error!",
                     "text" => "Business name, country and national ID number are required for seller accounts."
                 ];
                 $existingUser = null;
+            } elseif (!marketplaceIsValidCountry($profile['country'])) {
+                // The dropdown is the only source of this value, so anything
+                // else came from a tampered request.
+                $msg = [
+                    "title" => "Error!",
+                    "text" => "Please choose your country of operation from the list."
+                ];
+                $existingUser = null;
+            } else {
+                // The document is what the administrator checks the ID number
+                // against, so the application is incomplete without it.
+                $document = kycStoreDocument($_FILES['id_document'] ?? null);
+
+                if (!$document['ok']) {
+                    $msg = [
+                        "title" => "Error!",
+                        "text" => $document['error']
+                    ];
+                    $existingUser = null;
+                } else {
+                    $profile['id_document'] = $document['file'];
+                }
             }
         }
     }
@@ -127,6 +152,11 @@ if (isset($_POST['submit'])) {
             header("Location: ../");
             exit;
         } else {
+            // Do not keep a document that no account references.
+            if (!empty($profile['id_document'])) {
+                kycDeleteDocument($profile['id_document']);
+            }
+
             $msg = [
                 "title" => "Error!",
                 "text" => "An error occurred while saving the data."
@@ -208,12 +238,29 @@ if (isset($_POST['submit'])) {
 
                 <div class="form-group">
                     <label for="country">Country of Operation *</label>
-                    <input type="text" name="country" id="country" placeholder="Rwanda" maxlength="100">
+                    <select name="country" id="country" class="form-control">
+                        <option value="" disabled>Select country</option>
+                        <?php foreach (marketplaceCountries() as $country): ?>
+                            <option value="<?= htmlspecialchars($country); ?>"
+                                <?= $country === marketplaceDefaultCountry() ? 'selected' : ''; ?>>
+                                <?= htmlspecialchars($country); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
 
                 <div class="form-group">
                     <label for="id_number">National ID / Passport Number *</label>
                     <input type="text" name="id_number" id="id_number" placeholder="Identity document number" maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_document">Upload Identity Document *</label>
+                    <input type="file" name="id_document" id="id_document"
+                        accept="image/jpeg,image/png,image/webp,application/pdf">
+                    <small class="form-text text-muted">
+                        A clear photo or scan of the ID / passport above. JPG, PNG, WEBP or PDF, up to 5 MB.
+                    </small>
                 </div>
 
                 <p class="error-message" style="color:#666;">
@@ -259,7 +306,7 @@ if (isset($_POST['submit'])) {
             var box = document.getElementById('seller-fields');
             var isSeller = roleField.value === 'seller';
             box.style.display = isSeller ? 'block' : 'none';
-            ['business_name', 'country', 'id_number'].forEach(function(id) {
+            ['business_name', 'country', 'id_number', 'id_document'].forEach(function(id) {
                 var field = document.getElementById(id);
                 if (field) { field.required = isSeller; }
             });

@@ -1,24 +1,202 @@
+prompt:
 
-prompt given:
-
-please i want you to firstly accoridngly to this email so we got the idea to initially have the site we can present if we are asked by the pawapay in case they ask us we made it but there are those document beng asked as you have seen the email such as description of the due diligence procedures and KYC/AML policies as you see we have @"/Vendor Due Diligence Procedures (Final).docx" and @"/~$ndor Due Diligence Procedures (Final).docx" on e.g Cypadi Shop (shop.cypadi.com) is an online marketplace in Rwanda. Independent sellers list products; customers purchase and pay by mobile money. this statewment from @"/~$ndor Due Diligence Procedures (Final).docx" stating that yes we have the domain of cypadi.com yes and the domain is ready but we don't yet have the api way yes the customers usually pay with mobile money when buying as nomal is this a good statemetn not only the whole 2 docs provided are they correctly align as we intend to submit the email todady but before submitting the email with these documents what are documents missinig needed
+please want i want is to make the reply but firslty assure me that these @"/KYC and AML Policy (Final).docx"  and @"/Vendor Due Diligence Procedures (Final).docx"  are truelly strong and be accepted strong e.g are they having the company logo ? does it have the company stamp please check for me
 
 
-5/8Create admin/sellers.php approval screen
 
-Add .gitignore
+3/7Verify available logo assets / any stamp file
 
-Add seller KYC fields + approval gate (DB migration)
+Inspect both .docx files: embedded images (logo/stamp), structure
 
-Collect business/KYC details at seller signup
+Extract and review full text of both documents
 
-Block unapproved sellers from the seller panel
+Review prior PawaPay submission review for context
 
-Create seller/pending.php notice page
+Verify available logo assets / any stamp file
 
-Create admin/sellers.php approval screen
+Give verdict on logo, stamp, signature block
 
-Align about-us / footer / terms / privacy with the chosen model
+Advise on content gaps and strength
 
-Verify site loads and payment flow intact
+Provide the reply emai
 
+another prompt given was:
+
+i want to change the logo on the docx to use this https://cypadi.com/logo/cypadi_trancyparent_logo.png
+
+then the progress becomed:
+
+
+2/5
+Build script: fetch logo, write HTML, convert to .docx + PDF
+Confirm: no logo, no stamp, no signature in either original .docx
+Verify document claims against the current codebase
+Build script: fetch logo, write HTML, convert to .docx + PDF
+Verify logo embedded and PDFs render
+Deliver verdict + reply email
+
+
+then prompt becomed:
+2/7Generate KYC policy source file
+
+Confirm: no logo, no stamp, no signature in either original .docx
+
+Verify document claims against the current codebase
+
+Generate KYC policy source file
+
+Generate Vendor DD source file
+
+Convert both to .docx + PDF with logo header and page numbers
+
+Verify logo embedded and PDFs render
+
+Deliver verdict + reply email
+
+then new prompt becomed:
+given that our progress was @/current_ai-progress.txt , but i am very wondering of some correction we can make it so that we can continue our progress sofar @/KYC-VDD-AUDIT-AND-REPLY.md  i am not agreeing with these thing i want them to be removed, Two points I would be grateful for your guidance on this section it is not needed please, and also RDB Certificate of Company Registration — CYPADI LTD
+ please this is not necessary to be attached as you wrote it because we already passed this phase we have already uploaded while we are at initial stage of onboarding 
+
+then the progress becamed:
+
+4/5Verify the file reads cleanly end to end
+
+Remove the RDB Certificate attachment line and renumber remaining attachments
+
+Remove the "Two points I would be grateful for your guidance on" section from the ready-to-send reply
+
+Move the callback-URL and signed-callback findings into an internal section outside the email
+
+Fix the missing blank line before the section divider after §3
+
+Verify the file reads cleanly end to end
+
+
+
+
+prompt:
+given that our progress was @/current_ai-progress.txt , but i am very wondering of some correction we can make it so that we can continue our progress sofar @/KYC-VDD-AUDIT-AND-REPLY.md  i am not agreeing with these thing i want them to be removed, Two points I would be grateful for your guidance on this section it is not needed please, and also RDB Certificate of Company Registration — CYPADI LTD
+ please this is not necessary to be attached as you wrote it because we already passed this phase we have already uploaded while we are at initial stage of onboarding
+
+then the progress becommed:
+
+
+4/7Build both .docx with logo header, footer page numbers, document control and signature block
+
+Verify Word COM, logo file and output folder are usable
+
+Read the real approval gate (signup fields, seller_status, admin review, document streaming)
+
+Compose the KYC and AML Policy (v1.1) document body
+
+Compose the Vendor Due Diligence Procedures (v1.1) document body
+
+Build both .docx with logo header, footer page numbers, document control and signature block
+
+Verify page counts, header logo and placeholders in the generated files
+
+Report the remaining placeholders you must fill before printing
+
+
+then the progress becomed:
+
+5/9Diagnose the header picture sizing failure
+
+Verify Word COM, logo file and output folder are usable
+
+Read the real approval gate (signup fields, seller_status, admin review, document streaming)
+
+Compose the KYC and AML Policy (v1.1) document body
+
+Compose the Vendor Due Diligence Procedures (v1.1) document body
+
+Fix internal section cross-references
+
+Diagnose the header picture sizing failure
+
+Build both .docx and .pdf with logo header, footer page numbers, document control and signature block
+
+Verify page counts, header logo and placeholders in the generated files
+
+Report the remaining placeholders you must fill before printing
+
+
+then it becomed:
+1/5Diagnose the Word build hang
+
+Compose both document bodies and fix cross-references
+
+Diagnose the Word build hang
+
+Build both .docx and .pdf with logo header, footer page numbers, document control and signature block
+
+Verify page counts, header logo and placeholders in the generated files
+
+Report the remaining placeholders you must fill before printing
+
+
+
+then it becomed:
+1/5Diagnose the Word build hang
+
+Compose both document bodies and fix cross-references
+
+Diagnose the Word build hang
+
+Build both .docx and .pdf with logo header, footer page numbers, document control and signature block
+
+Verify page counts, header logo and placeholders in the generated files
+
+Report the remaining placeholders you must fill before printing
+
+given the prompt:
+
+
+
+then the progress becomed:
+3/8Read VDD source HTML to confirm markup
+
+Compose both document bodies and fix cross-references
+
+Diagnose the Word build hang (raw-HTML open crashes Word)
+
+Inspect existing python builders (render module incomplete, parser incomplete)
+
+Read VDD source HTML to confirm markup
+
+Write complete python-docx builder
+
+Convert both .docx to .pdf with Word
+
+Verify page counts, header logo and placeholders
+
+Report remaining placeholders before printing
+
+
+
+then the progress becomed:
+2/5Fix element order so borders/shading survive Word
+
+Build .docx and .pdf for both documents
+
+Visually inspect page 1 (found: gold rules dropped by Word)
+
+Fix element order so borders/shading survive Word
+
+Rebuild, re-render and re-verify all pages
+
+Report remaining placeholders before printing
+
+
+then the progress becomed:
+1/4Confirm whether paragraph borders reach the PDF
+
+Rebuild .docx and .pdf
+
+Confirm whether paragraph borders reach the PDF
+
+Verify all pages visually
+
+Report placeholders
+
+ 

@@ -1,0 +1,3 @@
+# Identity documents must never be fetched as static files: they are streamed
+# back by kyc-document.php, which checks who is asking first.
+Require all denied

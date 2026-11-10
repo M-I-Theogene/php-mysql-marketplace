@@ -1,0 +1,50 @@
+"""Convert a .docx to PDF with Word, driven through COM.
+
+Word is launched, the file exported, Word quit. Every step prints so a hang is
+visible in the console output.
+"""
+
+import os
+import sys
+
+import win32com.client
+
+WD_FORMAT_PDF = 17
+
+
+def convert(source, target):
+    if not os.path.isfile(source):
+        raise SystemExit("source missing: %s" % source)
+
+    print("opening Word")
+    word = win32com.client.DispatchEx("Word.Application")
+    word.Visible = False
+    word.DisplayAlerts = 0
+    print("Word version %s" % word.Version)
+
+    try:
+        document = word.Documents.Open(source, False, True, False)
+        pages = document.ComputeStatistics(2)
+        tables = document.Tables.Count
+        print("opened pages=%d tables=%d" % (pages, tables))
+
+        if os.path.isfile(target):
+            os.remove(target)
+        document.ExportAsFixedFormat(target, WD_FORMAT_PDF)
+        size = os.path.getsize(target) if os.path.isfile(target) else -1
+        print("exported exists=%s size=%d" % (os.path.isfile(target), size))
+        document.Close(0)
+    finally:
+        word.Quit()
+        print("Word quit")
+
+
+def main():
+    if len(sys.argv) != 3:
+        raise SystemExit("usage: _tmp_word_convert.py <source.docx> <target.pdf>")
+    convert(sys.argv[1], sys.argv[2])
+    print("CONVERT_DONE")
+
+
+if __name__ == "__main__":
+    main()

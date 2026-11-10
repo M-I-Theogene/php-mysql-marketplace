@@ -7,7 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['userId']) && isset($_GET
     $sellerStatus = $_GET['sellerStatus'];
 
     if ($userId > 0 && in_array($sellerStatus, $sellerStatuses, true)) {
-        $note = $query->validate($_GET['note'] ?? '');
+        // Stored raw (SQL-escaped only) so the pending page can escape it once.
+        $note = $query->escape($_GET['note'] ?? '');
         $query->update(
             'accounts',
             ['seller_status' => $sellerStatus, 'kyc_note' => $note],

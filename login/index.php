@@ -24,15 +24,17 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['session_token'])) {
         session_start();
     }
 
-    $username = $_COOKIE['username'];
+    // The cookie holds the identifier that was typed in, which may be an email
+    // address, so both columns are matched.
+    $identifier = $query->escape($_COOKIE['username']);
 
-    $result = $query->select('accounts', 'id, role', "WHERE username = '$username'");
+    $result = $query->select('accounts', 'id, role, username', "WHERE username = '$identifier' OR email = '$identifier'");
  
     if (!empty($result)) {
         $user = $result[0];
 
         $_SESSION['loggedin'] = true;
-        $_SESSION['username'] = $_COOKIE['username'];
+        $_SESSION['username'] = $user['username'];
         $_SESSION['id'] = $user['id'];
         $_SESSION['role'] = $user['role'];
 
@@ -68,7 +70,7 @@ if (isset($_POST['submit'])) {
             $_SESSION['username'] = isset($user[0]['username']) ? $user[0]['username'] : null;
             $_SESSION['role'] = isset($user[0]['role']) ? $user[0]['role'] : 'user';
 
-            setcookie('username', $username, time() + (86400 * 30), "/", "", true, true);
+            setcookie('username', $user[0]['username'], time() + (86400 * 30), "/", "", true, true);
             setcookie('session_token',  session_id(), time() + (86400 * 30), "/", "", true, true);
 
             if ($user[0]['role'] == 'admin') {
@@ -169,15 +171,17 @@ if (isset($_POST['submit'])) {
                 }
             });
 
+            // The field accepts a username or an email address, so '@' and '.'
+            // must be allowed here as well as letters, digits and underscores.
             const usernameInput = document.getElementById('username');
             const errorElement = document.getElementById('username-error');
-            const usernameRegex = /^[a-zA-Z0-9_]+$/;
+            const usernameRegex = /^[a-zA-Z0-9_.@+-]+$/;
 
             usernameInput.addEventListener('input', function() {
                 const usernameValue = this.value;
 
                 if (usernameValue && !usernameRegex.test(usernameValue)) {
-                    errorElement.textContent = "Username can only contain letters, numbers, and underscores!";
+                    errorElement.textContent = "Use only letters, numbers, and _ . @ + -";
                 } else {
                     errorElement.textContent = "";
                 }
@@ -187,7 +191,7 @@ if (isset($_POST['submit'])) {
             form.addEventListener('submit', function(event) {
                 if (!usernameRegex.test(usernameInput.value)) {
                     event.preventDefault();
-                    errorElement.textContent = "Username can only contain letters, numbers, and underscores!";
+                    errorElement.textContent = "Use only letters, numbers, and _ . @ + -";
                 }
             });
         });

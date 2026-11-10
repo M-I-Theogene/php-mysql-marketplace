@@ -20,6 +20,15 @@ if (!isset($userStatus[0]['status']) || empty($userStatus[0]['status']) || $user
     exit;
 }
 
+// Number of seller applications waiting for a decision. The sidebar shows it
+// as a badge so a pending applicant is never overlooked.
+$pendingApplications = $query->select(
+    'accounts',
+    'id',
+    "where role = 'seller' and seller_status = 'pending'"
+);
+$pendingSellers = count($pendingApplications);
+
 if (!isset($_SESSION['role']) || empty($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     $roles = [
         'seller' => '../seller/',

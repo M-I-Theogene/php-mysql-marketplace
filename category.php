@@ -1,8 +1,16 @@
 <?php include 'init.php';
 
-$category_id = $query->validate($_GET['category']);
+// Validate the query string before it reaches the database: an empty or
+// non-numeric category would otherwise produce a SQL syntax error.
+$category_id = $_GET['category'] ?? '';
+if (!is_numeric($category_id)) {
+    header("Location: ./");
+    exit;
+}
+
+$category_id = $query->validate($category_id);
 $product_id = $query->select('products', 'id', 'where category_id = ' . $category_id);
-if (!is_numeric($category_id) or !$product_id) {
+if (!$product_id) {
     header("Location: ./");
     exit;
 }

@@ -48,6 +48,58 @@ function marketplaceRunMigrations($mysqli)
     }
 
     marketplaceAddAccountColumns($mysqli);
+    marketplaceEnsureAdminAccount($mysqli);
+}
+
+/**
+ * Password given to the generated `admin` login.
+ * Sign in once and change it from the admin area.
+ */
+function marketplaceDefaultAdminPassword()
+{
+    return '123';
+}
+
+/**
+ * Guarantees an administrator can sign in.
+ *
+ * The seeded admin row used a password hash that no known password matched, so
+ * nobody could reach /admin. This creates a dedicated `admin` login once; it is
+ * skipped as soon as any administrator account exists.
+ */
+function marketplaceEnsureAdminAccount($mysqli)
+{
+    // Keyed on the login itself, not on the role: legacy installs already have
+    // an administrator row whose password nobody can reproduce.
+    $result = $mysqli->query("SELECT id FROM accounts WHERE username = 'admin' LIMIT 1");
+
+    if ($result) {
+        $hasAdminLogin = $result->num_rows > 0;
+        $result->free();
+
+        if ($hasAdminLogin) {
+            return;
+        }
+    }
+
+    $name = 'Administrator';
+    $number = '0000000000';
+    $email = 'admin@cypadi.com';
+    $username = 'admin';
+    $passwordHash = marketplaceHashPassword(marketplaceDefaultAdminPassword());
+
+    $stmt = $mysqli->prepare(
+        "INSERT INTO accounts (name, number, email, username, password, role, status, seller_status)
+         VALUES (?, ?, ?, ?, ?, 'admin', 'active', 'approved')"
+    );
+
+    if (!$stmt) {
+        return;
+    }
+
+    $stmt->bind_param('sssss', $name, $number, $email, $username, $passwordHash);
+    $stmt->execute();
+    $stmt->close();
 }
 
 /**
@@ -62,6 +114,7 @@ function marketplaceAddAccountColumns($mysqli)
         "country" => "VARCHAR(100) DEFAULT NULL",
         "id_number" => "VARCHAR(100) DEFAULT NULL",
         "kyc_note" => "VARCHAR(255) DEFAULT NULL",
+        "id_document" => "VARCHAR(255) DEFAULT NULL",
     ];
 
     $existing = [];

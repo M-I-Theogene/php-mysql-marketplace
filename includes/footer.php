@@ -1,3 +1,8 @@
+<?php
+// Root-relative base, so these links also resolve when the footer is included
+// from a subdirectory such as seller/pending.php.
+$footerBase = appBaseUrl() . '/';
+?>
 <footer class="footer spad">
 
     <div class="container">
@@ -10,7 +15,7 @@
 
                     <div class="footer__about__logo">
 
-                        <a href="./"><img src="./assets/images/cypadi-shop.png" alt="Cypadi Shop" style="height: 110px; width: auto; max-width: 100%;"></a>
+                        <a href="<?= $footerBase; ?>"><img src="<?= $footerBase; ?>assets/images/cypadi-shop.png" alt="Cypadi Shop" style="height: 110px; width: auto; max-width: 100%;"></a>
 
                     </div>
 
@@ -36,21 +41,21 @@
 
                     <ul>
 
-                        <li><a href="about-us.php">About Us</a></li>
+                        <li><a href="<?= $footerBase; ?>about-us.php">About Us</a></li>
 
-                        <li><a href="contact-us.php">Contact</a></li>
+                        <li><a href="<?= $footerBase; ?>contact-us.php">Contact</a></li>
 
-                        <li><a href="terms.php">Terms &amp; Conditions</a></li>
+                        <li><a href="<?= $footerBase; ?>terms.php">Terms & Conditions</a></li>
 
                     </ul>
 
                     <ul>
 
-                        <li><a href="privacy-policy.php">Privacy Policy</a></li>
+                        <li><a href="<?= $footerBase; ?>privacy-policy.php">Privacy Policy</a></li>
 
-                        <li><a href="refund-policy.php">Refund &amp; Returns</a></li>
+                        <li><a href="<?= $footerBase; ?>refund-policy.php">Refund & Returns</a></li>
 
-                        <li><a href="signup/">Become a Seller</a></li>
+                        <li><a href="<?= $footerBase; ?>signup/">Become a Seller</a></li>
 
                     </ul>
 
@@ -62,7 +67,7 @@
 
                 <div class="footer__widget">
 
-                    <h6>Marketplace</h6>
+                    <h6>About Cypadi</h6>
 
                     <p>Cypadi Shop is a Rwandan online store operated by Cypadi Ltd. Customers pay by MTN MoMo or Airtel Money at checkout.</p>
 
