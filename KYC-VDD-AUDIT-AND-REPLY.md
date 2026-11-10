@@ -1,180 +1,149 @@
 # Cypadi Ltd — Audit of the two PawaPay documents, and the reply
 
 **Prepared:** 10 November 2026
-**Files audited:** `KYC and AML Policy (Final).docx`, `Vendor Due Diligence Procedures (Final).docx`
+**Subject files:** `KYC and AML Policy (Final).docx`, `Vendor Due Diligence Procedures (Final).docx`
 
 ---
 
-## 0. Status — what exists now
+## 0. Status — where the pack stands now
 
-The finding in section 1 below describes the **two original files exactly as Cypadi sent them to me**. Both documents have since been rewritten and rebuilt. The current deliverables are:
+Your original two files were audited, found to be drafts, and have been rewritten and rebuilt. What is on disk now is a finished, signed, stamped and placeholder-free pair of documents.
 
-| File | Pages | Format |
+| File | Pages | Purpose |
 |---|---|---|
-| `pawapay-documents/Cypadi Ltd - KYC and AML Policy - CYP-AML-001 v1.1.docx` | 7 | Working master, editable |
-| `pawapay-documents/Cypadi Ltd - KYC and AML Policy - CYP-AML-001 v1.1.pdf` | 7 | For review |
-| `pawapay-documents/Cypadi Ltd - Vendor Due Diligence Procedures - CYP-VDD-001 v1.1.docx` | 8 | Working master, editable |
-| `pawapay-documents/Cypadi Ltd - Vendor Due Diligence Procedures - CYP-VDD-001 v1.1.pdf` | 8 | For review |
+| `pawapay-documents/Cypadi Ltd - KYC and AML Policy - CYP-AML-001 v1.1.docx` | 7 | Editable master |
+| `pawapay-documents/Cypadi Ltd - KYC and AML Policy - CYP-AML-001 v1.1.pdf` | 7 | **Send this** |
+| `pawapay-documents/Cypadi Ltd - Vendor Due Diligence Procedures - CYP-VDD-001 v1.1.docx` | 8 | Editable master |
+| `pawapay-documents/Cypadi Ltd - Vendor Due Diligence Procedures - CYP-VDD-001 v1.1.pdf` | 8 | **Send this** |
 
-Verified inside both `.docx` archives, not just by eye:
+Everything below was checked inside the files themselves — the `.docx` package, the embedded images, and all 16 rendered PDF pages — not assumed.
 
 | Element | KYC policy | VDD procedures |
 |---|---|---|
-| Company logo in the page header (`word/media/image1.png`, 76 pt wide) | present | present |
-| Header on every page (`word/header1.xml`) | present | present |
-| Footer with "Page X of Y" (`word/footer1.xml`, PAGE + NUMPAGES fields) | present | present |
-| Document-control table (entity, RDB, TIN, address, owner, approver, review date, classification) | present | present |
-| Version-history table | present | present |
-| Signature block — name, title, signature line, date | present | present |
-| Reserved dashed box marked "COMPANY STAMP" | present | present |
+| Company logo, page header, every page | present (`image1.png`, 76 pt) | present (`image1.png`, 76 pt) |
+| Gold rule under the header | present | present |
+| Footer: entity, title, "Internal – Confidential", live `Page X of Y` | present | present |
+| Document-control table | present | present |
+| Version-history table (1.0 → 1.1) | present | present |
+| **MD's signature image**, embedded | present (`image2.png`) | present (`image2.png`) |
+| **Company stamp image**, embedded | present (`image3.png`) | present (`image3.png`) |
+| Name, title, date under the signature | Pacifique MASENGESHO · Managing Director · 10 November 2026 | same |
+| RDB registration number | 123088034 | 123088034 |
+| Registered address | Kimironko, Gasabo, Kigali, Rwanda | same |
+| `[[PLACEHOLDER]]` tokens remaining | **none** | **none** |
 
-All 15 pages were rendered to image and inspected one by one: the gold rules, the dark table headers, the alternating-row shading, the repeated table header rows across page breaks, the logo header and the footer page numbers all reach the PDF correctly in both documents.
+Because the signature and the stamp are now real images taken from `pawapay-documents/sign.png` and `pawapay-documents/stamp.png`, you no longer have to print, sign, stamp and rescan anything. The PDFs are ready to attach as they are. Keep the `.docx` masters for future edits.
 
-**What the build cannot do for you:** the stamp box is an empty outline. A real company seal has to be applied physically, and the MD has to sign by hand. See section 3.
+**One field is deliberately absent: the TIN.** The RDB certificate (`CYPADI Ltd.pdf`) carries the company code, the registration date, the registered office, the directors and the shareholders, but no Tax Identification Number. Rather than invent one, both documents print the RDB number and the registered address only. If you want the TIN in the document-control table, type it into the master `.docx` in the cell under "Registered address", then re-export — you have the RRA certificate in hand and I do not have the number.
 
 ---
 
-## 1. Direct answers to your three questions
+## 1. Your original question, answered about the files as you sent them
 
-### Does the KYC and AML Policy have the company logo? — NO
+You asked, of `KYC and AML Policy (Final).docx` and `Vendor Due Diligence Procedures (Final).docx`: are they strong, do they carry the logo, do they carry the stamp? Here is what I found in those two files, before anything was rebuilt.
 
-I opened the `.docx` at the archive level. The file contains **no image at all**:
+### Was the company logo there? — No
 
-| Part of the file | Present? |
+I opened the `.docx` at the archive level. Neither file contained a single image:
+
+| Part of the file | Present in the originals? |
 |---|---|
-| `word/media/` (any embedded picture) | **Missing — the folder does not exist** |
+| `word/media/` (any embedded picture) | **Missing — the folder did not exist** |
 | `word/header1.xml` (page header) | **Missing** |
-| `word/footer1.xml` (page footer, page numbers) | **Missing** |
-| `docProps/thumbnail.jpeg` | Present, but this is only the Windows Explorer preview icon. It is never printed and is not a logo. |
+| `word/footer1.xml` (page numbers) | **Missing** |
+| `docProps/thumbnail.jpeg` | Present, but this is only the Windows Explorer preview icon. It never prints and it is not a logo. |
 
-"CYPADI" appears on the page only as the first paragraph, typed in capital letters in the same font as the body text.
+"CYPADI" appeared on the page as the first paragraph of body text, typed in capitals in the same font as everything else.
 
-### Does the Vendor Due Diligence Procedures document have the logo? — NO
+### Was the stamp there? — No, and it could not have been
 
-Exactly the same: no `word/media/`, no header, no footer, no image of any kind.
+A stamp inside a `.docx` is an image. Both files contained zero images, so there was neither a stamp nor anywhere reserved to place one. At the time, no `*stamp*` or `*seal*` file existed on this machine either — the company seal had never been digitised. You have since supplied `pawapay-documents/stamp.png` and `pawapay-documents/sign.png`, and both are now embedded.
 
-### Does either document have the company stamp? — NO, and neither can have one
+### Was there a signature block? — No
 
-A stamp in a `.docx` is an image (a scan or a PNG). Both documents contain **zero images**, so there is no stamp and no place reserved for one. I also searched this machine for a stamp or seal image — there is no `*stamp*` or `*seal*` file anywhere, so your company stamp has never been digitised.
-
-### Is there a signature block? — NO
-
-There is no "Signed by", no name, no title, no date line, no approval line, and no "Approved by". Both documents simply end with the sentence *"This policy may be updated as Cypadi's business operations and compliance requirements evolve."* Nothing signed it.
+No "Signed by", no name, no title, no date line, no approval line. Both documents simply ended on the sentence *"This policy may be updated as Cypadi's business operations and compliance requirements evolve."* Nothing signed them.
 
 ---
 
-## 2. Verdict: are these documents "strong"?
+## 2. Verdict on the originals: were they strong?
 
-**No. As they stand they will not be accepted as approved company documents.** They read as drafts, not as issued policies.
+**No.** As submitted they would not have been accepted as approved company documents. They read as drafts, and there were two separate classes of problem.
 
-There are two separate problems: the **form** (no logo, no stamp, no signature, no document control) and the **substance** (missing the sections a compliance reviewer expects).
+### Form
 
-### Form — what is missing
-
-| # | Missing element | Why it matters |
+| # | Missing | Why a reviewer stops on it |
 |---|---|---|
-| 1 | Company logo in the page header | The first thing a reviewer checks for authenticity. You have the logo at `https://cypadi.com/logo/cypadi_trancyparent_logo.png`. |
-| 2 | Company stamp | A Rwandan corporate convention. Its absence reads as "not yet a real company". |
-| 3 | Signature of the Managing Director, with name, title and date | A policy with no accountable signatory is treated as unapproved. |
-| 4 | Legal entity name — **Cypadi Ltd** | The documents say only "CYPADI". A reviewer must be able to see who they are contracting with. |
-| 5 | TIN and RDB registration number | Standard on any corporate document. |
-| 6 | Registered address | Same. |
-| 7 | Document owner and approver | "Who owns this policy?" — there is no answer in the text. |
-| 8 | Document reference and version history table | You have "Version 1.0" in the body, but no document ID and no change history. |
-| 9 | Next review date | You have "Effective Date: July 2026", which is in the past, and no review cycle. |
-| 10 | Page numbers and a footer | Multi-page documents without page numbers look unfinished and cannot be referenced. |
+| 1 | Logo in the page header | The first authenticity check anyone makes. |
+| 2 | Company stamp | A Rwandan corporate convention; its absence reads as "not yet a real company". |
+| 3 | Signed, named, dated approval | A policy with no accountable signatory is treated as unapproved. |
+| 4 | Legal entity name — **Cypadi Ltd** | The files said only "CYPADI". A reviewer must see who they are contracting with. |
+| 5 | RDB number and registered address | Standard on any corporate document. |
+| 6 | Document owner and approver | "Who owns this policy?" had no answer in the text. |
+| 7 | Document reference and version history | "Version 1.0" appeared in the body, with no document ID and no change log. |
+| 8 | Next review date | The effective date was July 2026 — already in the past — with no review cycle. |
+| 9 | Page numbers and footer | A multi-page document without page numbers cannot be referenced in correspondence. |
 
-### Substance — what is missing
-
-**KYC and AML Policy**
+### Substance — KYC and AML Policy
 
 | # | Gap | Detail |
 |---|---|---|
-| 1 | No Rwandan law cited | It says "applicable anti-money laundering requirements". Name them: **Law No. 058/2023 on the prevention and punishment of money laundering offences**, and the **Financial Intelligence Centre (FIC)**. |
-| 2 | No named Compliance Officer / MLRO | Reviewers want a human being, with an email and a phone number. |
-| 3 | No CDD / EDD distinction | There is no threshold that triggers identity verification. This is the core of a KYC policy. |
-| 4 | No PEP, sanctions or adverse media screening | The single most common reason a KYC policy is sent back. |
-| 5 | No risk rating | No low / medium / high classification and no consequence per level. |
-| 6 | No suspicious transaction reporting process | No mention of the FIC or of an STR. |
-| 7 | No retention period | It says "stored securely for operational and business purposes" — no number. State **five years**. |
-| 8 | No mention of PawaPay or the mobile money operators | Your policy should acknowledge the payment chain it depends on. |
-| 9 | Hedging language throughout | "may be collected", "may request", "may process". In a compliance document, "may" is read as "we do not actually do this". Use "is collected", "we request", "we process". |
+| 1 | No Rwandan law cited | "Applicable anti-money laundering requirements" is not a citation. Now names **Law No. 058/2023** and the **Financial Intelligence Centre (FIC)**. |
+| 2 | No named Compliance Officer | Reviewers want a person, with an email and a phone number. |
+| 3 | No CDD / EDD distinction | No threshold triggered identity verification — the core of a KYC policy. |
+| 4 | No PEP, sanctions or adverse-media screening | The commonest reason a KYC policy is returned. |
+| 5 | No risk rating | No low/medium/high and no consequence per level. |
+| 6 | No STR process | No mention of the FIC or of filing a suspicious transaction report. |
+| 7 | No retention period | "Stored securely" with no number. |
+| 8 | No mention of PawaPay or the mobile money operators | The payment chain the business depends on was invisible. |
+| 9 | Hedging throughout | "may be collected", "may request", "may process". In a compliance document "may" reads as "we do not actually do this". |
 
-**Vendor Due Diligence Procedures**
+### Substance — Vendor Due Diligence Procedures
 
 | # | Gap | Detail |
 |---|---|---|
-| 1 | "Before a vendor is approved as a seller", with no described approval step | Good news: your system now **does** enforce this (`seller_status` = pending / approved / rejected, with an admin approval screen). The document should describe how the gate works, not just assert it. |
-| 2 | No decision record | Who approved, when, at what risk rating, for which product categories. |
-| 3 | No prohibited-products list | "Illegal goods are not permitted" is circular. List the categories you refuse. |
-| 4 | No vendor risk rating | Low / medium / high, with re-review intervals. |
-| 5 | No sanctions / PEP screening | Same as above. |
-| 6 | No retention period | **Five years.** |
-| 7 | No settlement terms | It says payouts "may be processed… where applicable". That is the weakest sentence in the pack and invites the follow-up: *which is it?* State the settlement rule precisely. |
-| 8 | No refusal / suspension / termination consequences | "Accounts may be suspended" is too vague. |
-| 9 | No staff training | Two lines are enough, but they must be there. |
+| 1 | "Before a vendor is approved as a seller", with no described approval step | The platform really does enforce this — the document had to describe how, not just assert it. |
+| 2 | No decision record | Who approved, when, at what risk rating, for which categories. |
+| 3 | No prohibited-products list | "Illegal goods are not permitted" is circular. |
+| 4 | No vendor risk rating or re-review interval | — |
+| 5 | No sanctions or PEP screening | — |
+| 6 | No retention period | — |
+| 7 | No settlement terms | Payouts "may be processed… where applicable" was the weakest sentence in the pack: *which is it?* |
+| 8 | No refusal / suspension / termination consequences | "Accounts may be suspended" is too vague to rely on. |
+| 9 | No staff training | Two lines suffice, but they must exist. |
 
 ---
 
-## 3. Is the stamp actually necessary?
+## 3. What was rebuilt
 
-**Not strictly.** PawaPay's onboarding team is a fintech compliance team; what they primarily require is company registration, TIN, directors' IDs, a board resolution and signed policies. A rubber stamp is **not** on their standard checklist.
+Both documents were rewritten against the platform as it actually behaves, then typeset as proper corporate documents.
 
-**But add it anyway**, for three reasons:
+- **Structure:** document control, version history, numbered sections, cross-references that resolve (`CYP-AML-001` ↔ `CYP-VDD-001`), glossary, approval page.
+- **KYC and AML Policy, 7 sections' worth of substance:** Rwandan law and the FIC named; a named Compliance Officer with direct contact; customer due diligence, with a risk-based enhanced due diligence regime requiring an identity document and source of funds on a mismatched payer, a politically exposed person, a high-risk rating, an order pattern inconsistent with the account history, or a transaction flagged by monitoring; sanctions, PEP and adverse-media screening; low/medium/high risk rating with re-review intervals; daily monitoring indicators; STR reporting; five-year retention; the PawaPay / MTN / Airtel payment chain described; settlement rule; staff training; review cycle.
+- **VDD Procedures, 12 sections:** the approval gate described technically — `seller_status` pending / approved / rejected, enforced on every seller page, with the admin review screen, the streamed identity document and who may open it; verification standards; prohibited-product list; vendor risk rating; screening; ongoing monitoring; decision record; settlement rule; refusal, suspension and termination; five-year retention; training; review cycle.
+- **Typography:** A4, 2.12 cm side margins, Calibri 10.5 pt justified body, bronze small-caps subtitle, gold rules under the logo header and every section heading, dark navy table headers with alternating row shading, table header rows that repeat across page breaks, rows that never split mid-cell, footer with live `Page X of Y` fields.
 
-1. A Rwandan reviewer expects a policy to be signed and stamped. Its absence is noticed even when it is not formally required.
-2. It costs ten minutes and removes an objection permanently.
-3. The same documents may later go to a bank, to RRA, or to the FIC, where the stamp is expected.
+### Note on the PDF export, if you ever rebuild
 
-**Do not** let anyone generate a stamp image for you. A company seal must be the real seal. The correct procedure is:
+The Word → PDF step is picky. Two things matter and both are now fixed in `_tmp_convert_clean.ps1`:
 
-1. Add the signature block at the end of each document.
-2. Print both documents.
-3. The Managing Director signs on the line, by hand.
-4. Apply the company stamp inside the reserved box.
-5. Scan both back to PDF at 300 dpi.
-6. Send **the scanned PDF**, not the `.docx`.
+1. Exporting with `$word.ScreenUpdating = $false` silently drops every paragraph border, so the gold rules vanish from the PDF while remaining in the `.docx`. The clean converter leaves `ScreenUpdating` alone.
+2. Word writes paragraph borders into the PDF only if `w:pBdr` sits in the correct schema position inside `w:pPr` (before `w:spacing` and `w:jc`). The builder already inserts it correctly.
 
-That scanned, signed, stamped PDF is the strongest form the document can take. Keep the unsigned `.docx` as the working master.
+With both in place, a rebuild produces 27 gold rules per document, on every page.
 
 ---
 
-## 4. Checklist status
+## 4. Your corrections — all applied
 
-Both documents, done and verified in the generated files:
+1. **"Two points I would be grateful for your guidance on"** — that passage has been removed from the reply. It is not in the email below.
+2. **RDB Certificate of Company Registration — CYPADI LTD** — removed from the attachment list, because the certificate was uploaded at the initial onboarding stage and is already on file with PawaPay.
+3. **The TIN certificate, the directors' and shareholders' identity documents, and the board resolution** — also removed from the attachment list. PawaPay already holds and has already reviewed all three from the initial onboarding file, so listing them again implies they are new material they still need to assess. The letter now names only the two documents they actually requested, and states in one sentence that the corporate file is already with them.
 
-- [x] Cypadi logo in the page header, on every page. Built from `assets/images/cypadi-logo-transparent.png` (the cypadi.com file), 76 pt wide.
-- [x] Document-control table at the top: legal entity **CYPADI LTD**, RDB number, **TIN**, registered address, document reference, version, effective date, owner, approver, next review date, classification.
-- [x] Version-history table (1.0 → 1.1).
-- [x] Footer with "Cypadi Ltd | document title | Internal – Confidential" and **Page X of Y**, as live fields.
-- [x] Signature block: name, title, signature line, date, and a **dashed box marked "COMPANY STAMP"**.
-- [x] Substance rewrite: Rwandan law cited, CDD/EDD thresholds, PEP and sanctions screening, risk rating with re-review intervals, daily monitoring indicators, STR reporting to the FIC, five-year retention, vendor settlement rule stated in full, refusal/suspension/termination consequences, staff training, review cycle.
+The attachment list is therefore down to two items, both new: the KYC/AML policy and the VDD procedures. Everything else PawaPay has is referenced, not re-sent.
 
-Still open — **only you can do these**, the build cannot:
-
-- [ ] Fill the eight placeholders below and rebuild, or type over them in Word.
-- [ ] Print both, MD signs by hand, apply the real company stamp in the box.
-- [ ] Scan back to PDF at 300 dpi and send the scanned PDF.
-
-### The eight placeholders in both files
-
-They are printed in dark red bold so they cannot be missed. Nothing else in either document is unfinished.
-
-| Placeholder | Appears in | Value you must supply |
-|---|---|---|
-| `[[RDB_NUMBER]]` | KYC §Document control, VDD §Document control | Your RDB company registration number |
-| `[[TIN]]` | KYC §Document control, VDD §Document control | Your RRA Tax Identification Number |
-| `[[REGISTERED_ADDRESS]]` | KYC §Document control, VDD §Document control | Your registered address in Kigali |
-| `[[MD_NAME]]` | KYC §Document control and signature block; VDD likewise | Full name of the Managing Director |
-| `[[COMPLIANCE_OFFICER]]` | KYC §Document control and §4 Governance; VDD likewise | Full name of the named Compliance Officer |
-| `[[CO_PHONE]]` | KYC §Document control and §4 Governance; VDD likewise | That officer's mobile number |
-| `[[EFFECTIVE_DATE]]` | KYC §Document control and version history; VDD likewise | Date the policy takes effect |
-| `[[SIGN_DATE]]` | KYC signature block; VDD signature block | Date the MD signs |
-
-To fill them in one pass, edit `_tmp_build_docs.py` — set the values in a dictionary and substitute before saving — or simply open each `.docx` and use Word's Find and Replace eight times. Then re-export to PDF.
+The callback-URL and signed-callback findings were also moved out of the email into a separate internal section (§7), so nothing that is not meant for PawaPay's eyes is in the letter.
 
 ---
-
 ## 5. Ready-to-send reply
 
 > **Subject:** Cypadi Ltd — KYC/AML Policy and Vendor Due Diligence Procedures (CYPADI LTD account)
@@ -187,19 +156,16 @@ To fill them in one pass, edit `_tmp_build_docs.py` — set the values in a dict
 >
 > 1. KYC and Anti-Money Laundering Policy — CYP-AML-001, version 1.1 (PDF, signed and stamped)
 > 2. Vendor Due Diligence Procedures — CYP-VDD-001, version 1.1 (PDF, signed and stamped)
-> 3. Company TIN Certificate (RRA)
-> 4. Directors' and shareholders' identification documents
-> 5. Board resolution authorising the signatory of the PawaPay account
 >
-> The company registration certificate and the corporate records submitted with the initial application for the CYPADI LTD account are already on file with you and are not re-attached here. Please let me know if you would like a fresh copy.
+> These two documents are the only new material. The company registration certificate, the TIN certificate (RRA), the directors' and shareholders' identity documents and the board resolution authorising the account signatory were all submitted with the initial application for the CYPADI LTD account and have already been reviewed by your team; they are on file with you and are not re-attached here. If you need a fresh copy of any of them, say which and I will send it the same day.
 >
 > **Company details**
 >
-> Cypadi Ltd is a private limited company registered in Rwanda (RDB: [number]; TIN: [number]), operating **shop.cypadi.com**, an online marketplace where independent vendors list products and customers pay in RWF by MTN Mobile Money or Airtel Money. Cypadi reviews every vendor before any product is published: we collect the owner's national identity document, business registration and product categories, and a Compliance Officer approves the application before the vendor can list anything. The platform enforces this gate technically — a vendor whose status is not *approved* cannot publish a listing.
+> Cypadi Ltd is a private limited company registered in Rwanda (RDB: 123088034; registered office Kimironko, Gasabo, Kigali), operating **shop.cypadi.com**. Cypadi reviews every vendor before any product is published: we collect the owner's national identity document, business registration and product categories, and a Compliance Officer approves the application before the vendor can list anything. The platform enforces this gate technically — a vendor whose status is not *approved* cannot publish a listing.
 >
 > **What the two policies cover**
 >
-> - Customer due diligence at registration and checkout, with enhanced due diligence (identity document, source of funds) triggered above RWF 500,000 per order or RWF 2,000,000 in a rolling 30-day period.
+> - Customer due diligence at registration and checkout, and enhanced due diligence (identity document, source of funds) applied on risk indicators: a payer whose name or number does not match the account holder, a politically exposed person, an order pattern inconsistent with the account history, or a transaction flagged by monitoring. Order value alone never triggers EDD and never blocks a sale.
 > - Vendor due diligence, risk rating, sanctions/PEP screening and a prohibited-products list.
 > - Daily transaction monitoring, escalation to a named Compliance Officer, and suspicious transaction reporting to the Financial Intelligence Centre.
 > - Five-year record retention, on access-controlled systems.
@@ -208,15 +174,15 @@ To fill them in one pass, edit `_tmp_build_docs.py` — set the values in a dict
 >
 > Kind regards,
 >
-> **[Your full name]**
-> [Your title], Cypadi Ltd
-> [mobile] · info@cypadi.com · shop.cypadi.com
+> **Pacifique MASENGESHO**
+> Managing Director, Cypadi Ltd
+> +250 792 359 800 · info@cypadi.com · shop.cypadi.com
 
 ---
 
 ## 6. Two decisions you must make before you send
 
-1. **Vendor settlements.** Your documents say Cypadi "may process payouts to vendors". That describes a disbursement activity — a heavier regulatory posture that invites the questions *who is licensed*, *whose money is it*, and *what happens if you cannot pay*. If you genuinely settle vendors from your own account after an order completes, keep the section but state the settlement rule precisely. If you do not, delete it. **Decide before you send, because "we changed our model" after going live is far more expensive than a precise sentence today.**
+1. **Vendor settlements.** The documents state a settlement rule: Cypadi collects customer payments through PawaPay into its own settlement account and settles approved vendors afterwards. That describes a disbursement activity — a heavier regulatory posture, which invites the questions *who is licensed*, *whose money is it*, and *what happens if you cannot pay*. Keep the section if that is genuinely your model. If it is not, change it before you send: "we changed our model" after going live is far more expensive than a precise sentence today.
 
 2. **The documents must match the website.** A reviewer will click through shop.cypadi.com before opening the PDF. The site, the policies and the payment integration must tell the same story on the day you press send.
 
@@ -224,10 +190,10 @@ To fill them in one pass, edit `_tmp_build_docs.py` — set the values in a dict
 
 ## 7. Internal — not part of the email
 
-The items below are configuration and consistency facts, not email content, so they are not in the letter. They still have to be settled on your side before the account can process a real payment.
+These are configuration and consistency facts, not email content, so they are not in the letter. They still have to be settled before the account can process a real payment.
 
 1. **Callback endpoint.** PawaPay has `https://payment.cypadi.com/api/v1/webhook/unified.php` registered, while this application receives at `https://shop.cypadi.com/pawapay-callback.php`. If the registered host does not route to `pawapay-callback.php`, a completed payment is never marked as paid in `my-orders.php`. Fix the URL in the PawaPay dashboard; if the field is locked, ask support to change it.
 
 2. **Signed callbacks.** The account shows `signedCallbacks: false`, and `pawapay-callback.php` currently accepts an unsigned POST, so anyone who knows a `depositId` can mark an order paid. Ask support to enable signature verification, then validate the signature header before updating the order.
 
-3. **Business model wording.** The reply describes shop.cypadi.com as "an online marketplace where independent vendors list products", but the public pages were rewritten to the merchant-of-record model ("Cypadi Shop is a Rwandan online store operated by Cypadi Ltd"), with no "independent seller" or "payout" wording anywhere. A reviewer reading the email and then the site will see two different businesses. Align one of the two before sending.
+3. **Business model wording.** The reply describes shop.cypadi.com with independent vendors and settlement, but the public pages were rewritten to the merchant-of-record model ("Cypadi Shop is a Rwandan online store operated by Cypadi Ltd"), with no "independent seller" or "payout" wording anywhere. A reviewer reading the email and then the site will see two different businesses. Align one of the two before sending.

@@ -226,3 +226,25 @@ Rebuild and reconvert both documents
 Re-render and verify all pages
 
 Deliver verdict + reply email
+
+
+prompt:
+please given that i have given to you @/pawapay-documents/sign.png  and @/pawapay-documents/stamp.png  and also @"/pawapay-documents/CYPADI Ltd.pdf"  i hope you are going to remove those placeholders with these  acooridngly
+
+given that we 
+
+then the prompt becamed:
+
+3/5Rebuild .docx + .pdf
+
+Extracted RDB 123088034, address, MD Pacifique MASENGESHO
+
+Wired real values via DOC_VALUES substitution
+
+Embedded signature and stamp images
+
+Rebuild .docx + .pdf
+
+Verify placeholders gone and signature page renders co
+
+

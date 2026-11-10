@@ -19,6 +19,21 @@ from docx.shared import Cm, Pt, RGBColor
 ROOT = os.path.dirname(os.path.abspath(__file__))
 LOGO = os.path.join(ROOT, "assets", "images", "cypadi-logo-transparent.png")
 OUT_DIR = os.path.join(ROOT, "pawapay-documents")
+SIGN_IMAGE = os.path.join(OUT_DIR, "sign.png")
+STAMP_IMAGE = os.path.join(OUT_DIR, "stamp.png")
+
+# Values taken from the RDB certificate (pawapay-documents/CYPADI Ltd.pdf,
+# company code 123088034, issued 20/07/2025). Anything not evidenced there is
+# deliberately left as a placeholder rather than invented.
+DOC_VALUES = {
+    "RDB_NUMBER": "123088034",
+    "REGISTERED_ADDRESS": "Kimironko, Gasabo",
+    "MD_NAME": "Pacifique MASENGESHO",
+    "COMPLIANCE_OFFICER": "Pacifique MASENGESHO",
+    "CO_PHONE": "+250 792 359 800",
+    "EFFECTIVE_DATE": "10 November 2026",
+    "SIGN_DATE": "10 November 2026",
+}
 
 BODY_FONT = "Calibri"
 BODY_SIZE = Pt(10.5)
@@ -208,6 +223,8 @@ def set_cell_margins(table, top=60, bottom=60, left=90, right=90):
 def add_runs(paragraph, text, size=BODY_SIZE, color=None, bold=False, italic=False):
     """Write text with **bold**, *italic* and [[placeholder]] markers."""
     base = TEXT if color is None else color
+    for key, value in DOC_VALUES.items():
+        text = text.replace("[[%s]]" % key, value)
     for piece in INLINE_RE.split(text):
         if not piece:
             continue
@@ -238,6 +255,7 @@ def render_title(document, text):
     paragraph.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
     keep_with_next(paragraph)
     add_runs(paragraph, text, size=Pt(20), bold=True)
+    return paragraph
 
 
 def render_subtitle(document, text):
@@ -245,6 +263,7 @@ def render_subtitle(document, text):
     paragraph.paragraph_format.space_after = Pt(8)
     paragraph.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
     add_runs(paragraph, text.upper(), size=Pt(9), color=BRONZE)
+    return paragraph
 
 
 def render_rule(document):
@@ -253,16 +272,18 @@ def render_rule(document):
     paragraph.paragraph_format.space_after = Pt(12)
     paragraph.paragraph_format.line_spacing = Pt(1)
     set_paragraph_border(paragraph, "bottom", GOLD, 24, 0)
+    return paragraph
 
 
 def render_heading2(document, text):
     paragraph = document.add_paragraph()
-    paragraph.paragraph_format.space_before = Pt(14)
-    paragraph.paragraph_format.space_after = Pt(6)
+    paragraph.paragraph_format.space_before = Pt(11)
+    paragraph.paragraph_format.space_after = Pt(5)
     paragraph.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
     keep_with_next(paragraph)
     add_runs(paragraph, text, size=Pt(12.5), color=TEXT, bold=True)
     set_paragraph_border(paragraph, "bottom", GOLD, 6, 3)
+    return paragraph
 
 
 def render_heading3(document, text):
@@ -272,10 +293,14 @@ def render_heading3(document, text):
     paragraph.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
     keep_with_next(paragraph)
     add_runs(paragraph, text, size=Pt(10.5), color=BRONZE, bold=True)
+    return paragraph
 
 
-def render_paragraph(document, text, small=False, align_center=False, space_before=0):
+def render_paragraph(document, text, small=False, align_center=False, space_before=0,
+                     keep_next=False):
     paragraph = document.add_paragraph()
+    if keep_next:
+        keep_with_next(paragraph)
     if space_before:
         paragraph.paragraph_format.space_before = Pt(space_before)
     paragraph.paragraph_format.space_after = Pt(4 if small else 7)
@@ -380,7 +405,7 @@ def render_table(document, head, rows, label_col):
     if head:
         write_row(head, is_head=True)
     for position, row in enumerate(rows):
-        write_row(row["cells"], alt=(position % 2 == 1) or row.get("alt", False))
+        write_row(row["cells"], alt=position % 2 == 1)
 
     for index, width in enumerate(widths):
         table.columns[index].width = Cm(width)
@@ -394,6 +419,7 @@ def render_signature(document):
     table = document.add_table(rows=1, cols=2)
     table.autofit = False
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    set_row_properties(table.rows[0])
     left, right = table.rows[0].cells
     left.width = Cm(CONTENT_W_CM * 0.56)
     right.width = Cm(CONTENT_W_CM * 0.44)
@@ -403,11 +429,14 @@ def render_signature(document):
     add_runs(heading, "SIGNED FOR AND ON BEHALF OF CYPADI LTD", size=Pt(9), color=MUTED, bold=True)
 
     line = left.add_paragraph()
-    line.paragraph_format.space_before = Pt(22)
+    line.paragraph_format.space_before = Pt(6)
     line.paragraph_format.space_after = Pt(2)
     set_paragraph_border(line, "bottom", DARK, 6, 0)
-    cap = line.add_run("")
-    cap.font.size = Pt(9)
+    if os.path.exists(SIGN_IMAGE):
+        line.add_run().add_picture(SIGN_IMAGE, width=Cm(3.6))
+    else:
+        spacer = line.add_run("")
+        spacer.font.size = Pt(9)
 
     caption = left.add_paragraph()
     caption.paragraph_format.space_after = Pt(10)
@@ -426,18 +455,13 @@ def render_signature(document):
     dated.paragraph_format.space_after = Pt(2)
     add_runs(dated, "Date: [[SIGN_DATE]]", size=BODY_SIZE)
 
-    stamp_table = right.add_table(rows=1, cols=1)
-    stamp_table.autofit = False
-    set_table_borders(stamp_table, STAMP_GREY, 8, "dashed")
-    stamp_cell = stamp_table.rows[0].cells[0]
-    stamp_cell.width = Cm(CONTENT_W_CM * 0.38)
-    stamp_table.rows[0].height = Pt(104)
-    stamp_table.rows[0].height_rule = WD_ROW_HEIGHT_RULE.AT_LEAST
-    vertical_center(stamp_cell)
-    label = stamp_cell.paragraphs[0]
-    label.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    label.paragraph_format.space_before = Pt(42)
-    add_runs(label, "COMPANY STAMP", size=Pt(8.5), color=RGBColor(0x9A, 0x91, 0x84), bold=False)
+    holder = right.paragraphs[0]
+    holder.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    holder.paragraph_format.space_before = Pt(6)
+    if os.path.exists(STAMP_IMAGE):
+        holder.add_run().add_picture(STAMP_IMAGE, width=Cm(4.2))
+    else:
+        add_runs(holder, "COMPANY STAMP", size=Pt(8.5), color=RGBColor(0x9A, 0x91, 0x84), bold=False)
 # ------------------------------------------------------------- page setup
 
 def configure_document(document, job):
@@ -715,36 +739,54 @@ def parse_blocks(path):
 
 
 def render_blocks(document, blocks):
+    """Render the parsed blocks in order.
+
+    A page break is carried as pageBreakBefore on the next block's paragraph
+    rather than emitted as its own empty paragraph. An empty paragraph holding
+    a break is pushed onto a fresh page when the preceding page is already
+    full, which left a blank page in front of the approval page.
+    """
     previous = None
-    for block in blocks:
+    pending_break = False
+    for index, block in enumerate(blocks):
         kind = block["type"]
+
+        if kind == "pagebreak":
+            pending_break = True
+            continue
+
+        following = blocks[index + 1]["type"] if index + 1 < len(blocks) else None
+
+        paragraph = None
         if kind == "title":
-            render_title(document, block["text"])
+            paragraph = render_title(document, block["text"])
         elif kind == "subtitle":
-            render_subtitle(document, block["text"])
+            paragraph = render_subtitle(document, block["text"])
         elif kind == "rule":
-            render_rule(document)
+            paragraph = render_rule(document)
         elif kind == "h2":
-            render_heading2(document, block["text"])
+            paragraph = render_heading2(document, block["text"])
         elif kind == "h3":
-            render_heading3(document, block["text"])
+            paragraph = render_heading3(document, block["text"])
         elif kind == "p":
-            render_paragraph(
+            paragraph = render_paragraph(
                 document,
                 block["text"],
                 small=block.get("small", False),
                 space_before=20 if previous == "signature" else 0,
+                keep_next=following == "signature",
             )
         elif kind == "ul":
             render_bullets(document, block["items"])
         elif kind == "table":
             render_table(document, block["head"], block["rows"], block["label_col"])
-        elif kind == "pagebreak":
-            paragraph = document.add_paragraph()
-            paragraph.paragraph_format.space_after = Pt(0)
-            paragraph.add_run().add_break(WD_BREAK.PAGE)
         elif kind == "signature":
             render_signature(document)
+
+        if paragraph is not None and pending_break:
+            paragraph.paragraph_format.page_break_before = True
+            pending_break = False
+
         previous = kind
 
 

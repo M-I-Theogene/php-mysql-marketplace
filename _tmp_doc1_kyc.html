@@ -38,7 +38,6 @@ tr.alt td { background: #FAF7F0; }
   <tr class="alt"><td class="lbl">Organisation</td><td>CYPADI LTD</td></tr>
   <tr><td class="lbl">Legal form</td><td>Private limited company incorporated in Rwanda</td></tr>
   <tr class="alt"><td class="lbl">RDB registration number</td><td><span class="ph">[[RDB_NUMBER]]</span></td></tr>
-  <tr><td class="lbl">Tax Identification Number (TIN)</td><td><span class="ph">[[TIN]]</span></td></tr>
   <tr class="alt"><td class="lbl">Registered address</td><td><span class="ph">[[REGISTERED_ADDRESS]]</span>, Kigali, Rwanda</td></tr>
   <tr><td class="lbl">Business activity</td><td>Operation of the online marketplace shop.cypadi.com</td></tr>
   <tr class="alt"><td class="lbl">Policy owner</td><td><span class="ph">[[COMPLIANCE_OFFICER]]</span>, Compliance Officer &mdash; compliance@cypadi.com, <span class="ph">[[CO_PHONE]]</span></td></tr>
@@ -52,7 +51,7 @@ tr.alt td { background: #FAF7F0; }
 <table>
   <tr><th style="width:12%">Version</th><th style="width:20%">Date</th><th>Summary of change</th></tr>
   <tr><td>1.0</td><td>July 2026</td><td>Initial issue.</td></tr>
-  <tr class="alt"><td>1.1</td><td><span class="ph">[[EFFECTIVE_DATE]]</span></td><td>Document control and governance added; named Compliance Officer; customer and enhanced due diligence thresholds defined; sanctions, PEP and adverse media screening added; suspicious transaction reporting to the Financial Intelligence Centre added; five-year retention set; vendor settlement rule stated; risk rating, refusal, training and review sections added.</td></tr>
+  <tr class="alt"><td>1.1</td><td><span class="ph">[[EFFECTIVE_DATE]]</span></td><td>Document control and governance added; named Compliance Officer; a risk-based customer and enhanced due diligence regime defined; sanctions, PEP and adverse media screening added; suspicious transaction reporting to the Financial Intelligence Centre added; five-year retention set; vendor settlement rule stated; risk rating, refusal, training and review sections added.</td></tr>
 </table>
 
 <h2>1. Purpose and legal basis</h2>
@@ -102,14 +101,17 @@ tr.alt td { background: #FAF7F0; }
 <p>This record is sufficient to identify the payer and to reconcile every order to a single payment. No product is dispatched unless the payment has been confirmed by the payment partner.</p>
 
 <h3>5.2 Enhanced due diligence (EDD)</h3>
+<p>Cypadi applies enhanced due diligence where the risk of the customer or of the transaction warrants it. EDD is not triggered by order value alone: Cypadi sells ordinary consumer goods, including high-value electronics, and a legitimate customer may spend a large sum on a single item. The value of an order is therefore one factor in the risk assessment under section 7, never a reason by itself to refuse or delay a sale.</p>
 <p>Cypadi obtains a copy of a government-issued identity document (national identity card or passport), and records the source of funds where relevant, before completing a transaction where any of the following applies:</p>
 <ul>
-  <li>a single order exceeds <strong>RWF 500,000</strong>;</li>
-  <li>cumulative purchases exceed <strong>RWF 2,000,000</strong> within a rolling period of thirty (30) days;</li>
   <li>the name or phone number of the payer differs materially from the registered account holder;</li>
   <li>the customer is a politically exposed person, a family member or a known close associate;</li>
-  <li>the transaction has been flagged under section 9.</li>
+  <li>the transaction has been flagged under section 9;</li>
+  <li>the customer is rated high risk under section 7;</li>
+  <li>the transaction is unusual for the customer's established order pattern, including a sudden or unexplained jump in order size, frequency or delivery destination;</li>
+  <li>the payment originates from a number, device or location inconsistent with the account history.</li>
 </ul>
+<p>Where a single order exceeds <strong>RWF 5,000,000</strong>, or cumulative purchases exceed <strong>RWF 10,000,000</strong> within a rolling period of thirty (30) days, the Compliance Officer reviews the order before it is released for dispatch. That review is a control on the transaction, not a condition of the sale: an identified customer buying an expensive item is not refused, and the order proceeds once the review is complete.</p>
 <p>Where satisfactory identification cannot be obtained, Cypadi cancels the order and refunds the payment to the original paying number through the same provider.</p>
 
 <h2>6. Vendor due diligence</h2>
@@ -120,7 +122,7 @@ tr.alt td { background: #FAF7F0; }
 <table>
   <tr><th style="width:13%">Rating</th><th style="width:42%">Indicators</th><th style="width:26%">Applied controls</th><th>Re-review</th></tr>
   <tr><td><strong>Low</strong></td><td>Verified identity; consistent order pattern; delivery within Rwanda; no adverse findings.</td><td>Standard CDD; automated monitoring under section 9.</td><td>Every 24 months</td></tr>
-  <tr class="alt"><td><strong>Medium</strong></td><td>Unverified business registration; trading less than 12 months; higher-fraud categories such as electronics and mobile phones; orders approaching the EDD threshold.</td><td>Standard CDD plus business verification; transaction limits; manual review.</td><td>Every 12 months</td></tr>
+  <tr class="alt"><td><strong>Medium</strong></td><td>Unverified business registration; trading less than 12 months; higher-fraud categories such as electronics and mobile phones; an order pattern that cannot be reconciled with the stated business or purpose.</td><td>Standard CDD plus business verification; transaction limits; manual review.</td><td>Every 12 months</td></tr>
   <tr><td><strong>High</strong></td><td>Politically exposed person; adverse media; identity inconsistent with the payer; repeated failures or refunds; anything Cypadi cannot verify.</td><td>EDD before the transaction; Compliance Officer approval for each order; settlement held until cleared.</td><td>Every 6 months</td></tr>
 </table>
 
