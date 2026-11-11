@@ -245,6 +245,160 @@ Embedded signature and stamp images
 
 Rebuild .docx + .pdf
 
-Verify placeholders gone and signature page renders co
+Verify placeholders gone and signature page renders 
+
+the progress becomed:
+4/6Re-render and visually verify all pages
+
+Verify build artefacts, placeholders, embedded images
+
+Confirm signature + stamp images embedded on signature page
+
+Diagnose: ScreenUpdating=$false stripped paragraph borders on export
+
+Convert with clean converter — 27 gold rules per document
+
+Re-render and visually verify all pages
+
+Deliver verdict + reply email
+
+prompt given:
+
+given that we were doing @/current_ai-progress.txt  , this •	a single order exceeds RWF 500,000;
+•	cumulative purchases exceed RWF 2,000,000 within a rolling period of thirty (30) days;
+ it is over-rated i think it is better to remove it is not realistic because a customer can make a single product and exceeds that kind of moany 500,000 e.g can buy I IPHONE 18 ,...... TVS,.....
+
+then the progress becomed:
+
+6/7Verify the rebuilt documents
+
+Locate the RWF 500,000 / RWF 2,000,000 thresholds in the document sources
+
+Replace the value-based EDD triggers with risk-based wording (review-only at RWF 5,000,000 / 10,000,000)
+
+Remove the leftover "EDD threshold" and "RWF 1,000,000 a month" references
+
+Confirm no stale money thresholds remain in either source
+
+Rebuild .docx
+
+Convert to .pdf
+
+Verify the rebuilt documents
 
 
+then it becamed:
+
+3/5Verify the rendered PDFs
+
+Replace the value-based EDD triggers with risk-based wording
+
+Remove leftover threshold references in both sources
+
+Rebuild both .docx and .pdf
+
+Verify the rendered PDFs
+
+Update KYC-VDD-AUDIT-AND-REPLY.md to match
+
+
+then it becomed:
+
+5/6Visually verify the rebuilt §5.2 page
+
+Remove the RWF 500,000 / RWF 2,000,000 EDD triggers from the KYC policy
+
+Replace with risk-based EDD indicators + review-only RWF 5,000,000 / 10,000,000
+
+Rebuild both .docx and .pdf
+
+Verify the rendered PDF text
+
+Update KYC-VDD-AUDIT-AND-REPLY.md to match
+
+Visually verify the rebuilt §5.2 page
+
+
+prompt:
+there is an issue in the word document @"/KYC and AML Policy (Final).docx"  there is a page which is almost empty it must be dismissed
+
+progress becamed:
+3/5Rebuild both .docx and .pdf
+
+Remove the unrealistic RWF 500,000 / RWF 2,000,000 EDD triggers
+
+Replace the break paragraph with pageBreakBefore on the Approval heading
+
+Keep the Approval heading, sentence and signature table on one page
+
+Rebuild both .docx and .pdf
+
+Verify page counts and that no page is blank
+
+then it becomed:
+3/5Convert to .pdf
+
+Remove the unrealistic RWF 500,000 / RWF 2,000,000 EDD triggers
+
+Replace the break paragraph with pageBreakBefore on the Approval heading
+
+Keep the Approval heading, sentence and signature table on one page
+
+Convert to .pdf
+
+Verify page counts and that no page is blank
+
+
+then it becomed:
+4/5Diagnose why the signature table leaves the Approval page
+
+Remove the unrealistic RWF 500,000 / RWF 2,000,000 EDD triggers
+
+Replace the break paragraph with pageBreakBefore on the Approval heading
+
+Rebuild both .docx and .pdf
+
+Measure text volume per page — KYC p7 still blank, VDD fine
+
+Diagnose why the signature table leaves the Approval p
+
+
+then it becomed:
+
+3/5Tighten heading spacing so §17 ends on page 6
+
+Remove the unrealistic RWF 500,000 / RWF 2,000,000 EDD triggers
+
+Replace the break paragraph with pageBreakBefore on the Approval heading
+
+Diagnose: page 7 is an orphan of §17, not a stray break
+
+Tighten heading spacing so §17 ends on page 6
+
+Rebuild, reconvert and re-measure every page
+
+
+
+then it becomes:
+
+4/6Visually confirm KYC p6 and p7
+
+Remove the unrealistic RWF 500,000 / RWF 2,000,000 EDD triggers
+
+Diagnose the near-empty page: §17 overflow, not the approval block
+
+Tighten h2 spacing — KYC now 7 pages, no blank page
+
+Rebuild and re-measure every page
+
+Visually confirm KYC p6 and p7
+
+Update page counts in the audit/reply file
+
+
+
+then the prompt:
+before I submit this application please make another .md which includes what primary the auditor or the approver on pawapay board can test or verify or search online what popular think do you think they can go and look accordingly to the this site of @shopping i tend to host on the subdomain of shop.cypadi.com , please make the checklist and asseess but pleaase remember look the priority the one common that the auditor can verify incase he get's interested to see that domain
+
+the progress becamed:
+.....

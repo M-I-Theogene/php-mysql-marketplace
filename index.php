@@ -5,8 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Ogani Template">
-    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="description" content="Cypadi Shop - buy online in Rwanda. Pay with MTN MoMo or Airtel Money at checkout, delivered across Kigali and Rwanda.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="./favicon.ico">
@@ -117,8 +116,8 @@
                                                     <h5><a
                                                             onclick="openProductDetails(<?php echo $product_id; ?>)"><?php echo $product_name; ?></a>
                                                     </h5>
-                                                    <div class="product__item__price">$<?php echo $price_current; ?>
-                                                        <span>$<?php echo $price_old; ?></span>
+                                                    <div class="product__item__price">RWF <?php echo number_format((float) $price_current); ?>
+                                                        <span>RWF <?php echo number_format((float) $price_old); ?></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -129,6 +128,7 @@
                             </div>
                         </div>
                     <?php endforeach; ?>
+                    <?php $homeProducts = $query->select('products', '*', 'LIMIT 15'); ?>
                     <div class="filter__item">
                         <div class="row">
                             <div class="col-lg-4 col-md-5">
@@ -142,7 +142,7 @@
                             </div>
                             <div class="col-lg-4 col-md-4">
                                 <div class="filter__found">
-                                    <h6><span>16</span> Products found</h6>
+                                    <h6><span><?php echo count($homeProducts); ?></span> Products found</h6>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-3">
@@ -155,8 +155,7 @@
                     </div>
                     <div class="row">
                         <?php
-                        $products = $query->select('products', '*', "LIMIT 15");
-                        foreach ($products as $product):
+                        foreach ($homeProducts as $product):
                             $product_name = $product['name'];
                             $category_name = $query->select('categories', 'category_name', 'WHERE id=' . $product['category_id'])[0]['category_name'];
                             $price_current = $product['price_current'];
@@ -183,8 +182,8 @@
                                         <h5><a
                                                 onclick="openProductDetails(<?php echo $product_id; ?>)"><?php echo $product_name; ?></a>
                                         </h5>
-                                        <div class="product__item__price">$<?php echo $price_current; ?>
-                                            <span>$<?php echo $price_old; ?></span>
+                                        <div class="product__item__price">RWF <?php echo number_format((float) $price_current); ?>
+                                            <span>RWF <?php echo number_format((float) $price_old); ?></span>
                                         </div>
                                     </div>
                                 </div>

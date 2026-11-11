@@ -21,11 +21,11 @@ $footerBase = appBaseUrl() . '/';
 
                     <ul>
 
-                        <li>Address: Kigali, Rwanda</li>
+                        <li>Address: <?= companyAddress(); ?></li>
 
-                        <li>Phone: +250 784 801 809</li>
+                        <li>Support: <?= COMPANY_PHONE_SUPPORT; ?></li>
 
-                        <li>Email: info@cypadi.com</li>
+                        <li>Email: <?= COMPANY_EMAIL; ?></li>
 
                     </ul>
 
@@ -71,9 +71,9 @@ $footerBase = appBaseUrl() . '/';
 
                     <p>Cypadi Shop is a Rwandan online store operated by Cypadi Ltd. Customers pay by MTN MoMo or Airtel Money at checkout.</p>
 
-                    <p class="mt-2">Cypadi Ltd &middot; Kigali, Rwanda</p>
+                    <p class="mt-2"><?= companyLegalLine(); ?></p>
 
-                    <p>&copy; <?= date('Y'); ?> Cypadi Ltd. All rights reserved.</p>
+                    <p>&copy; <?= date('Y'); ?> <?= COMPANY_LEGAL_NAME; ?>. All rights reserved.</p>
 
                 </div>
 

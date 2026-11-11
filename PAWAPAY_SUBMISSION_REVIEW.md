@@ -218,9 +218,6 @@ Structure is clean and readable: Purpose → Registration → Identity → Revie
 
 ---
 
-</append_to_file>
-
-</append_to_file>
 ## 4. Document review — `KYC and AML Policy (Final).docx`
 
 ### Problems
@@ -311,18 +308,21 @@ If you keep Model A instead, these sentences stay and you must instead **build t
 
 ---
 
-## 6. Documents still missing from the submission
+## 6. What else a reviewer may ask for
 
-These are what a provider's onboarding team typically expects alongside the two policies. Name every file `Cypadi - <Document> - <YYYY-MM-DD>.pdf` and send one folder or one zip.
+Only two items need to be attached: the two policies. Everything the corporate file contains was already submitted and reviewed at onboarding, so the correct move is to reference it, not to re-send it. The lists below separate the two cases.
 
-### Company / legal — highest priority, almost certainly required
-1. **RDB Certificate of Domestic Company Registration** for Cypadi Ltd.
-2. **Company TIN certificate** (RRA).
+### Company / legal — already on file, do not re-send
+These were all submitted and reviewed at initial onboarding. Do **not** attach them again: a second copy of an already-assessed document reads as new material and can restart the review.
+1. **RDB Certificate of Domestic Company Registration** for Cypadi Ltd — submitted, on file.
+2. **Company TIN certificate** (RRA) — submitted, on file.
+5. **Directors' and shareholders' register**, plus a passport or national ID for each director and beneficial owner — submitted, on file.
+7. **Board resolution** naming who may open and operate the PawaPay account, with that person's ID — submitted, on file.
+
+Still genuinely useful to send if you have them, because they were not part of the onboarding file:
 3. **RSSB registration certificate**, if you have staff.
 4. **Memorandum & Articles of Association** as filed with RDB.
-5. **Directors' and shareholders' register**, plus a **passport or national ID** for each director and beneficial owner.
 6. **Proof of registered business address** — lease, utility bill, or RDB address confirmation.
-7. **Board resolution** naming who may open and operate the PawaPay account, with that person's ID.
 8. **Company profile**, one page: what you sell, since when, where you deliver, expected monthly volume, average order value.
 
 ### Payment and operations
@@ -356,41 +356,19 @@ Your draft mixes four things (a status update, a website description, the docume
 >
 > Dear [Name],
 >
-> I am writing from **Cypadi Ltd** (TIN: [ … ], RDB: [ … ]), the company operating **shop.cypadi.com**, an online store in Rwanda. We collect payments from our customers by MTN Mobile Money and Airtel Money through PawaPay.
+> Thank you for your email. Please find attached the two documents you requested for the CYPADI LTD account:
 >
-> **Website**
-> shop.cypadi.com is live. Customers browse products, add them to a cart, enter a delivery address and pay at checkout by mobile money. Cypadi Ltd is the merchant of record for every order. Our terms, privacy policy and refund policy are published in the site footer.
+> 1. KYC and Anti-Money Laundering Policy — Cypadi Ltd — v1.1
+> 2. Vendor Due Diligence Procedures — Cypadi Ltd — v1.1
 >
-> **Payment integration**
-> Our checkout calls the PawaPay Collections API on your production environment (`/v2/deposits`). Each order is created with a unique `orderNumber` and a unique `depositId`, and both are passed in the deposit metadata so every payment can be reconciled to a single order. Order status is updated from the payment callback, with a polling fallback on the confirmation page. Current transaction range is RWF 5 – 2,000,000 for MTN MoMo and RWF 100 – 1,500,000 for Airtel Money, within the limits published in your active configuration.
->
-> One point I would like to close out: the callback URL currently on our account is `https://payment.cypadi.com/api/v1/webhook/unified.php`, while our application endpoint is `https://shop.cypadi.com/pawapay-callback.php`. Please advise which should remain registered, or update the configuration to the latter, so that every confirmed payment is recorded on our side.
->
-> **Documents attached**
-> - KYC & AML Policy — Cypadi Ltd — v1.1 (PDF)
-> - Vendor & Customer Due Diligence Procedures — Cypadi Ltd — v1.1 (PDF)
-> - RDB Certificate of Company Registration
-> - Company TIN Certificate
-> - Directors and shareholders, with identification
-> - Board resolution authorising the account signatory
-> - Refund and complaint handling procedure
-> - Product categories and prohibited items list
-> - Screenshots of the checkout flow, and one completed test transaction
->
-> **What I would be grateful to receive**
-> 1. Confirmation that these documents complete your file, or what further items are required.
-> 2. Confirmation of the correct callback endpoint (above).
-> 3. Whether callbacks can be enabled with **signature verification** for our account. We would like to validate the authenticity of every callback before marking an order paid, and will switch to signed callbacks as soon as you enable them.
-> 4. Confirmation of any transaction limits or volume thresholds that apply to our account.
->
-> I am happy to supply anything further the same day, or to walk your team through the checkout flow on a short call at your convenience.
+> One point to close out: the callback URL on our account is `https://payment.cypadi.com/api/v1/webhook/unified.php`, while our application endpoint is `https://shop.cypadi.com/pawapay-callback.php`. Please confirm which should remain registered, or update the configuration to the latter.
 >
 > Kind regards,
-> **[Full name]**
-> [Title], Cypadi Ltd
-> [mobile] · [email] · shop.cypadi.com
+> **Pacifique MASENGESHO**
+> Managing Director, Cypadi Ltd
+> +250 792 359 800 · info@cypadi.com · shop.cypadi.com
 
-Nothing in that email apologises for readiness, and every sentence is verifiable in your own system. Note item 3 — asking *them* for signature verification makes you the party who understands the risk, which is the impression this whole submission should create.
+Nothing in that email apologises for readiness, and every sentence is verifiable in your own system. It is deliberately short: two attachments, one line on the callback endpoint, nothing else. The corporate file — registration certificate, TIN, directors' IDs, board resolution — is not mentioned at all. Signature verification still needs asking for; raise it in a separate short email, not in this one.
 
 ---
 
@@ -455,7 +433,7 @@ WhatsApp/support chat widget, order tracking statuses shared with the customer, 
 - [ ] Export both policies to PDF and name them `Cypadi - <Title> - v1.1.pdf`.
 
 **Should accompany**
-- [ ] RDB certificate, TIN certificate, directors' IDs, board resolution.
+- [ ] None of the corporate file. The RDB certificate, TIN certificate, directors' IDs and board resolution were submitted at initial onboarding and have already been reviewed — re-sending them suggests new material and invites a second review cycle. Reference them as already on file.
 - [ ] One-page company profile with expected monthly volume and average order value.
 - [ ] Four checkout screenshots plus one completed transaction record.
 - [ ] Product categories and prohibited-items list.

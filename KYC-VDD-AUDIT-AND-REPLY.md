@@ -137,11 +137,10 @@ With both in place, a rebuild produces 27 gold rules per document, on every page
 
 1. **"Two points I would be grateful for your guidance on"** — that passage has been removed from the reply. It is not in the email below.
 2. **RDB Certificate of Company Registration — CYPADI LTD** — removed from the attachment list, because the certificate was uploaded at the initial onboarding stage and is already on file with PawaPay.
-3. **The TIN certificate, the directors' and shareholders' identity documents, and the board resolution** — also removed from the attachment list. PawaPay already holds and has already reviewed all three from the initial onboarding file, so listing them again implies they are new material they still need to assess. The letter now names only the two documents they actually requested, and states in one sentence that the corporate file is already with them.
+3. **The TIN certificate, the directors' and shareholders' identity documents, and the board resolution** — removed from the attachment list, and then removed from the letter altogether. PawaPay already holds and has already reviewed all three, so they are not mentioned at all: no listing, no reminder that they are on file, no offer to re-send.
+4. **The letter was cut down.** The "Company details" paragraph — which explained how vendors are reviewed and how the platform enforces the approval gate — is gone. It was arguing a case nobody had put to you, and it named a technical control (`seller_status`) that a reviewer can test. The walkthrough offer and the closing "tell me if anything is missing" line are gone too. What is left is: two attachments, four short bullets on what the policies cover, and the signature.
 
-The attachment list is therefore down to two items, both new: the KYC/AML policy and the VDD procedures. Everything else PawaPay has is referenced, not re-sent.
-
-The callback-URL and signed-callback findings were also moved out of the email into a separate internal section (§7), so nothing that is not meant for PawaPay's eyes is in the letter.
+The letter contains no reference to the corporate file in any form — it is simply not part of this submission. The callback-URL and signed-callback findings sit in §7, so nothing that is not meant for PawaPay's eyes is in the letter.
 
 ---
 ## 5. Ready-to-send reply
@@ -150,27 +149,17 @@ The callback-URL and signed-callback findings were also moved out of the email i
 >
 > Dear [Name],
 >
-> Thank you for your email. Please find attached our due-diligence documents for the CYPADI LTD account.
+> Thank you for your email. Please find attached the two documents you requested for the CYPADI LTD account:
 >
-> **Documents attached**
->
-> 1. KYC and Anti-Money Laundering Policy — CYP-AML-001, version 1.1 (PDF, signed and stamped)
-> 2. Vendor Due Diligence Procedures — CYP-VDD-001, version 1.1 (PDF, signed and stamped)
->
-> These two documents are the only new material. The company registration certificate, the TIN certificate (RRA), the directors' and shareholders' identity documents and the board resolution authorising the account signatory were all submitted with the initial application for the CYPADI LTD account and have already been reviewed by your team; they are on file with you and are not re-attached here. If you need a fresh copy of any of them, say which and I will send it the same day.
->
-> **Company details**
->
-> Cypadi Ltd is a private limited company registered in Rwanda (RDB: 123088034; registered office Kimironko, Gasabo, Kigali), operating **shop.cypadi.com**. Cypadi reviews every vendor before any product is published: we collect the owner's national identity document, business registration and product categories, and a Compliance Officer approves the application before the vendor can list anything. The platform enforces this gate technically — a vendor whose status is not *approved* cannot publish a listing.
+> 1. KYC and Anti-Money Laundering Policy — CYP-AML-001, version 1.1
+> 2. Vendor Due Diligence Procedures — CYP-VDD-001, version 1.1
 >
 > **What the two policies cover**
 >
-> - Customer due diligence at registration and checkout, and enhanced due diligence (identity document, source of funds) applied on risk indicators: a payer whose name or number does not match the account holder, a politically exposed person, an order pattern inconsistent with the account history, or a transaction flagged by monitoring. Order value alone never triggers EDD and never blocks a sale.
+> - Customer due diligence at registration and checkout, and enhanced due diligence on defined risk indicators. Order value alone never triggers EDD and never blocks a sale.
 > - Vendor due diligence, risk rating, sanctions/PEP screening and a prohibited-products list.
-> - Daily transaction monitoring, escalation to a named Compliance Officer, and suspicious transaction reporting to the Financial Intelligence Centre.
-> - Five-year record retention, on access-controlled systems.
->
-> If anything in the pack is incomplete, please tell me exactly what is missing and I will send it the same day. I am also happy to walk your team through the checkout flow on a short call.
+> - Daily transaction monitoring, escalation to a named Compliance Officer, and reporting to the Financial Intelligence Centre.
+> - Five-year record retention on access-controlled systems.
 >
 > Kind regards,
 >
