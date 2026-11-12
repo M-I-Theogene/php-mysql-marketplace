@@ -14,6 +14,82 @@ function marketplaceHashPassword($password)
     return hash_hmac('sha256', (string) $password, PASSWORD_PEPPER);
 }
 
+// The connection settings below are read from .env when it defines them, so a
+// deployment can keep its credentials out of the repository.
+require_once __DIR__ . '/includes/env.php';
+
+/**
+ * One database setting, with .env taking precedence over the default.
+ *
+ * The defaults are the cPanel values for shop.cypadi.com. Defining DB_HOST,
+ * DB_USER, DB_PASS and DB_NAME in .env overrides them without touching code.
+ */
+function marketplaceDbSetting($name, $default)
+{
+    $value = getenv($name);
+
+    if (is_string($value) && $value !== '') {
+        return $value;
+    }
+
+    return $default;
+}
+
+/**
+ * True when the request is served from a developer machine.
+ *
+ * The XAMPP fallback credentials are `root` with no password. They must never
+ * be tried on the live host: if such an account existed there, the shop would
+ * silently run as the database superuser instead of its own cPanel user.
+ */
+function marketplaceIsLocalHost()
+{
+    if (PHP_SAPI === 'cli') {
+        return true;
+    }
+
+    $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+    $host = strtolower(preg_replace('/:\d+$/', '', $host));
+
+    return in_array($host, array('localhost', '127.0.0.1', '[::1]', '::1'), true);
+}
+
+/**
+ * Reports a database failure as a readable page instead of an HTTP 500.
+ *
+ * A bare 500 tells the operator nothing, while a stack trace would tell the
+ * whole internet. The detail goes to the error log, and to the screen only
+ * when ?debug=cypadi is on the URL.
+ */
+function marketplaceDatabaseError($detail)
+{
+    error_log('Cypadi Shop database error: ' . $detail);
+
+    if (!headers_sent()) {
+        header('Content-Type: text/html; charset=utf-8');
+        http_response_code(503);
+    }
+
+    echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
+        . '<meta name="viewport" content="width=device-width, initial-scale=1">'
+        . '<title>Cypadi Shop | Temporarily unavailable</title></head>'
+        . '<body style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;'
+        . 'max-width:38rem;margin:4rem auto;padding:0 1.25rem;line-height:1.6;color:#222">'
+        . '<h1 style="font-size:1.5rem">We are bringing the shop back up</h1>'
+        . '<p>The catalogue is temporarily unavailable. Please try again in a few minutes.</p>';
+
+    if (isset($_GET['debug']) && $_GET['debug'] === 'cypadi') {
+        echo '<hr><pre style="white-space:pre-wrap;font-size:.85rem;color:#a00">'
+            . htmlspecialchars($detail, ENT_QUOTES, 'UTF-8') . '</pre>';
+    } else {
+        echo '<hr><p style="color:#666;font-size:.85rem">Details were written to the server error log.</p>';
+    }
+
+    echo '</body></html>';
+
+    exit;
+}
+
 class Database
 {
     private $conn;
@@ -23,24 +99,87 @@ class Database
 
     public function __construct()
     {
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "marketplace";
+        // PHP 8.1 turns every mysqli failure into a thrown exception, so a
+        // single bad query anywhere would surface as a blank HTTP 500. The
+        // methods on this class test return values instead, so the older
+        // report-as-value behaviour they are written against is restored.
+        if (function_exists('mysqli_report')) {
+            mysqli_report(MYSQLI_REPORT_OFF);
+        }
 
-        $this->conn = new mysqli($servername, $username, $password, $dbname);
+        if (!function_exists('mysqli_init')) {
+            marketplaceDatabaseError('The mysqli extension is not enabled on this server.');
+        }
 
-        if ($this->conn->connect_error) {
-            die("Connection failed: " . $this->conn->connect_error);
+        // Tried in order. The first entry is the cPanel account behind
+        // shop.cypadi.com; the second is the XAMPP default used for local
+        // development, so one checkout runs on both without editing this file.
+        // Either can be replaced from .env (DB_HOST, DB_USER, DB_PASS, DB_NAME).
+        $credentialSets = array(
+            array(
+                marketplaceDbSetting('DB_HOST', 'localhost'),
+                marketplaceDbSetting('DB_USER', 'cjwfktusal_cypadi_shop'),
+                marketplaceDbSetting('DB_PASS', 'cypadi_shop'),
+                marketplaceDbSetting('DB_NAME', 'cjwfktusal_cypadi_shop'),
+            ),
+        );
+
+        // Only a developer machine may fall back to XAMPP's passwordless root.
+        if (marketplaceIsLocalHost()) {
+            $credentialSets[] = array(
+                marketplaceDbSetting('DB_HOST', 'localhost'),
+                'root',
+                '',
+                marketplaceDbSetting('DB_NAME', 'marketplace'),
+            );
+        }
+
+        $this->conn = null;
+        $attemptErrors = array();
+
+        foreach ($credentialSets as $credentials) {
+            list($dbHost, $dbUser, $dbPass, $dbName) = $credentials;
+
+            $handle = mysqli_init();
+
+            if (!$handle) {
+                $attemptErrors[] = 'mysqli_init() returned no handle';
+                continue;
+            }
+
+            if (@$handle->real_connect($dbHost, $dbUser, $dbPass, $dbName)) {
+                $this->conn = $handle;
+                break;
+            }
+
+            $attemptErrors[] = $dbUser . '@' . $dbHost . '/' . $dbName . ': ' . $handle->connect_error;
+        }
+
+        if (!$this->conn) {
+            marketplaceDatabaseError('Cannot connect to MySQL. ' . implode(' | ', $attemptErrors));
+        }
+
+        // The catalogue holds accented names and the franc sign; without this
+        // the connection defaults to latin1 and those become question marks.
+        if (!$this->conn->set_charset('utf8mb4')) {
+            $this->conn->set_charset('utf8');
         }
 
         // Every page reaches the database through this constructor, including
         // /signup, /seller and /admin, which include config.php directly rather
         // than init.php. Running the schema check here guarantees the seller KYC
         // columns exist before the first seller registers on a fresh install.
+        // A migration that fails must not take the whole storefront down with
+        // it, so the failure is logged and the page continues with the schema
+        // it already has.
         if (!self::$migrated) {
-            marketplaceRunMigrations($this->conn);
             self::$migrated = true;
+
+            try {
+                marketplaceRunMigrations($this->conn);
+            } catch (Throwable $migrationError) {
+                error_log('Cypadi Shop schema migration skipped: ' . $migrationError->getMessage());
+            }
         }
     }
 
