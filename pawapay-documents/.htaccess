@@ -1,0 +1,6 @@
+# The signed KYC and VDD policies, the managing director's signature and the
+# company stamp live here. They are sent to PawaPay by email; they must never
+# be downloadable from the shop. The root .htaccess also blocks this directory,
+# but that rule needs mod_rewrite, so this file is the guarantee that holds even
+# when no rewrite module is loaded.
+Require all denied

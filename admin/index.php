@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="icon" href="../favicon.ico">
+    <?php include __DIR__ . '/../includes/favicon.php'; ?>
     <title>AdminLTE 3 | Sellers</title>
     <?php include 'includes/css.php'; ?>
 </head>

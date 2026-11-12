@@ -1,15 +1,45 @@
 # Protect secrets and internal files from being served over HTTP.
-# Apache honours this; on Nginx add an equivalent `location` deny rule.
+# Apache honours this; on Nginx add equivalent `location` deny rules.
 
-<FilesMatch "^\.(env|git|htaccess|htpasswd|cursorindexingignore)">
+# --- Files that must never be downloaded -----------------------------------
+# .env holds the PawaPay API token and the administrator password seed.
+# database.sql carries the schema. The .md files are internal review notes.
+# The .docx files are working copies of the KYC and VDD policies. None of
+# these belong on a public web server, and a reviewer who can fetch them can
+# read things the business never intended to publish.
+<FilesMatch "(^\.|^~?[$]|\.(env|sql|md|docx|log|bak|ini|sh|ps1|py|txt|lock)$)">
     Require all denied
 </FilesMatch>
 
-<FilesMatch "(^~\$|\.docx$|\.sql$|\.md$)">
-    Require all denied
-</FilesMatch>
+# --- Directories that must never be reachable ------------------------------
+# pawapay-documents/ holds the signed policies, the signature image and the
+# company stamp. _tmp_* are working files left behind by document builds.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(\.git|pawapay-documents|_preview|_tmp[^/]*|node_modules)(/|$) - [R=404,L,NC]
+</IfModule>
+
+# Same rule without mod_rewrite, as long as mod_alias is present.
+<IfModule mod_alias.c>
+    RedirectMatch 404 "^/(\.git|pawapay-documents|_preview)($|/)"
+</IfModule>
 
 DirectoryIndex index.php index.html
 
 # Do not list directory contents.
 Options -Indexes
+
+# Serve the site as UTF-8; the product and policy pages contain accented
+# characters and the Rwandan franc sign.
+AddDefaultCharset UTF-8
+
+# A short cache lifetime on images keeps the storefront responsive without
+# pinning a replaced product photo in place for a year.
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 7 days"
+    ExpiresByType image/png "access plus 7 days"
+    ExpiresByType image/webp "access plus 7 days"
+    ExpiresByType text/css "access plus 7 days"
+    ExpiresByType application/javascript "access plus 7 days"
+</IfModule>

@@ -26,7 +26,7 @@ $name = $query->select('categories', 'category_name', "where id = '$category_id'
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" href="./favicon.ico">
+    <?php include __DIR__ . '/includes/favicon.php'; ?>
     <title>iMarket</title>
 
     <!-- Google Font -->
@@ -90,8 +90,10 @@ $name = $query->select('categories', 'category_name', "where id = '$category_id'
                                 <h5><a
                                         onclick="openProductDetails(<?php echo $product_id; ?>)"><?php echo $product_name; ?></a>
                                 </h5>
-                                <div class="product__item__price">$<?php echo $price_current; ?>
-                                    <span>$<?php echo $price_old; ?></span>
+                                <div class="product__item__price"><?= formatRwf($price_current); ?>
+                                    <?php if ((float) $price_old > 0): ?>
+                                        <span><?= formatRwf($price_old); ?></span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

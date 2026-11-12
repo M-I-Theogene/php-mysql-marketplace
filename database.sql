@@ -12,6 +12,14 @@ CREATE TABLE accounts (
   role VARCHAR(20) NOT NULL DEFAULT 'user',
   status ENUM('active', 'blocked') NOT NULL DEFAULT 'active',
   registration_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  -- Seller onboarding: KYC details plus the review state. A seller row stays
+  -- 'pending' and cannot list a product until an administrator approves it.
+  seller_status ENUM('pending','approved','rejected') NOT NULL DEFAULT 'approved',
+  business_name VARCHAR(150) DEFAULT NULL,
+  country VARCHAR(100) DEFAULT NULL,
+  id_number VARCHAR(100) DEFAULT NULL,
+  kyc_note VARCHAR(255) DEFAULT NULL,
+  id_document VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (id)
 );
 
@@ -64,17 +72,27 @@ CREATE TABLE wishes (
   FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
--- ==============================  
--- 📥 DATA INSERTION (COMPLETE)  
--- ==============================  
--- DEFAULT PASSWORD: "IQBOLSHOH" (HASHED FOR SECURITY)  
--- ==============================  
+-- ==============================
+-- DATA INSERTION
+-- ==============================
+--
+-- No account in this dump has a usable password. An earlier version shipped an
+-- administrator login whose password was published in this file, which meant a
+-- fresh import could be taken over by anyone who read it.
+--
+--   * The administrator login is created on first page load by
+--     marketplaceEnsureAdminAccount() in includes/db-migrate.php. It takes its
+--     password from ADMIN_INITIAL_PASSWORD in .env, or generates a random one
+--     and writes it to admin-initial-password.txt in the project root.
+--
+--   * Row 2 owns the demonstration catalogue (products below reference
+--     seller_id = 2). Its password is an empty string, which the login rejects
+--     because Database::verifyPassword() returns false for an empty hash. Set a
+--     real password after registering the business as a seller.
+-- ==============================
 
-INSERT INTO accounts (id, name, number, email, username, password, role, status, registration_date) VALUES
-(1, 'Iqbolshoh', '+998997799333', 'Iqbolshoh@gmail.com', 'Iqbolshoh', '52be5ff91284c65bac56f280df55f797a5c505f7ef66317ff358e34791507027', 'admin', 'active', '2024-05-14 11:17:25'),
-(2, 'seller', '+998997733999', 'seller@gmail.com', 'seller', '52be5ff91284c65bac56f280df55f797a5c505f7ef66317ff358e34791507027', 'seller', 'active', '2024-05-14 11:17:25'),
-(3, 'user', '+998993399777', 'user@gmail.com', 'user', '52be5ff91284c65bac56f280df55f797a5c505f7ef66317ff358e34791507027', 'user', 'active', '2024-05-14 11:17:25'),
-(4, 'userAKA', '+998993399177', 'userAKA@gmail.com', 'userAKA', '52be5ff91284c65bac56f280df55f797a5c505f7ef66317ff358e34791507027', 'user', 'active', '2024-05-14 11:17:25');
+INSERT INTO accounts (id, name, number, email, username, password, role, status, seller_status, business_name, country, registration_date) VALUES
+(2, 'Cypadi Ltd', '+250784801809', 'seller@cypadi.com', 'cypadi', '', 'seller', 'active', 'approved', 'Cypadi Ltd', 'Rwanda', '2024-05-14 11:17:25');
 
 INSERT INTO categories (id, category_name) VALUES
 (1, 'Phone'),

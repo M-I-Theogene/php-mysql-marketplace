@@ -49,15 +49,144 @@ function marketplaceRunMigrations($mysqli)
 
     marketplaceAddAccountColumns($mysqli);
     marketplaceEnsureAdminAccount($mysqli);
+    marketplacePriceCatalogueInRwf($mysqli);
 }
 
 /**
- * Password given to the generated `admin` login.
- * Sign in once and change it from the admin area.
+ * Price below which a `products` row cannot be a franc amount.
+ *
+ * Kigali retail for the cheapest item in this catalogue — a 32-inch television
+ * — is about RWF 165,000. Anything under ten thousand has never been converted
+ * from the dollar figures the demonstration dump was imported with.
  */
-function marketplaceDefaultAdminPassword()
+const CATALOGUE_RWF_FLOOR = 10000;
+
+/**
+ * Rewrites the seeded catalogue from US dollars into Rwandan francs, once.
+ *
+ * The dump was imported from a shop that quoted dollars, while every template
+ * printed an "RWF" prefix in front of whatever it found: a Tecno Spark 20
+ * advertised at "RWF 249", roughly seventeen US cents. Converting in the
+ * database rather than at render time means the storefront, the cart totals,
+ * the order rows and the amount sent to PawaPay all agree on one figure.
+ *
+ * Idempotent by construction. The guard row only matches while prices are still
+ * dollar-sized, and no converted price can fall back under the floor, so the
+ * second and every later request does nothing at all.
+ */
+function marketplacePriceCatalogueInRwf($mysqli)
 {
-    return '123';
+    $guard = $mysqli->query('SELECT COUNT(*) AS legacy FROM products WHERE price_current < ' . CATALOGUE_RWF_FLOOR);
+
+    if (!$guard) {
+        return;
+    }
+
+    $row = $guard->fetch_assoc();
+    $guard->free();
+
+    if (!$row || (int) $row['legacy'] === 0) {
+        return;
+    }
+
+    $catalogue = require __DIR__ . '/catalog-prices.php';
+
+    // A row is matched on its imported name. Corrected names are indexed too so
+    // a half-applied run — one that renamed rows before it priced them — still
+    // resolves instead of converting an already-correct name a second time.
+    // Both sides are trimmed: `products.name` is VARCHAR(30) and the import
+    // truncated twelve names mid-word, leaving some with a trailing space that
+    // an exact match would miss.
+    $byName = [];
+    foreach ($catalogue as $importedName => $entry) {
+        $byName[trim($importedName)] = $entry;
+        $byName[trim($entry['name'])] = $entry;
+    }
+
+    $products = $mysqli->query('SELECT id, name, price_current, price_old FROM products');
+
+    if (!$products) {
+        return;
+    }
+
+    $update = $mysqli->prepare('UPDATE products SET name = ?, price_current = ?, price_old = ? WHERE id = ?');
+
+    if (!$update) {
+        $products->free();
+        return;
+    }
+
+    while ($product = $products->fetch_assoc()) {
+        $entry = $byName[trim($product['name'])] ?? null;
+
+        if ($entry !== null) {
+            $name = $entry['name'];
+            $current = rwfRound($entry['price_current']);
+            $old = rwfRound($entry['price_old']);
+        } else {
+            // A seller's own listing, or a product added after this list was
+            // written. Convert what is there rather than leave it dollar-sized.
+            $name = $product['name'];
+            $current = convertUsdToRwf($product['price_current']);
+            $old = convertUsdToRwf($product['price_old']);
+        }
+
+        if ($old < $current) {
+            $old = $current;
+        }
+
+        $id = (int) $product['id'];
+        $update->bind_param('siii', $name, $current, $old, $id);
+        $update->execute();
+    }
+
+    $update->close();
+    $products->free();
+}
+
+/**
+ * File that receives a generated administrator password, relative to the
+ * project root. It is git-ignored and should be deleted once the password has
+ * been changed from the admin area.
+ */
+const ADMIN_PASSWORD_FILE = 'admin-initial-password.txt';
+
+/**
+ * Password given to the generated `admin` login.
+ *
+ * Taken from ADMIN_INITIAL_PASSWORD in .env when that is set, so a deployment
+ * can choose it. Otherwise a random one is generated and written to
+ * admin-initial-password.txt, because a hard-coded default meant every install
+ * of this application shared the same administrator password.
+ *
+ * Returns a two-element array: the password and whether it was generated.
+ */
+function marketplaceGenerateAdminPassword()
+{
+    $configured = getenv('ADMIN_INITIAL_PASSWORD');
+
+    if (is_string($configured) && trim($configured) !== '') {
+        return [trim($configured), false];
+    }
+
+    return [bin2hex(random_bytes(9)), true];
+}
+
+/**
+ * Writes a generated administrator password beside the application so the
+ * operator can read it, with owner-only permissions where the platform allows.
+ */
+function marketplaceStoreAdminPassword($password)
+{
+    $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . ADMIN_PASSWORD_FILE;
+    $body = "Administrator login\n"
+        . "username: admin\n"
+        . "password: " . $password . "\n\n"
+        . "Sign in at /admin, change this password, then delete this file.\n";
+
+    if (@file_put_contents($path, $body) !== false) {
+        @chmod($path, 0600);
+    }
 }
 
 /**
@@ -83,10 +212,15 @@ function marketplaceEnsureAdminAccount($mysqli)
     }
 
     $name = 'Administrator';
-    $number = '0000000000';
+    // COMPANY_PHONE_SUPPORT comes from includes/company.php, which config.php
+    // loads before this file. Fall back to an empty value rather than risk a
+    // fatal error if this file is ever included on its own.
+    $number = defined('COMPANY_PHONE_SUPPORT') ? COMPANY_PHONE_SUPPORT : '';
     $email = 'admin@cypadi.com';
     $username = 'admin';
-    $passwordHash = marketplaceHashPassword(marketplaceDefaultAdminPassword());
+
+    [$password, $generated] = marketplaceGenerateAdminPassword();
+    $passwordHash = marketplaceHashPassword($password);
 
     $stmt = $mysqli->prepare(
         "INSERT INTO accounts (name, number, email, username, password, role, status, seller_status)
@@ -100,6 +234,10 @@ function marketplaceEnsureAdminAccount($mysqli)
     $stmt->bind_param('sssss', $name, $number, $email, $username, $passwordHash);
     $stmt->execute();
     $stmt->close();
+
+    if ($generated) {
+        marketplaceStoreAdminPassword($password);
+    }
 }
 
 /**

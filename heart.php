@@ -11,7 +11,7 @@ $cartItemsHeart = $query->getWishes($_SESSION['id']);
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" href="./favicon.ico">
+    <?php include __DIR__ . '/includes/favicon.php'; ?>
     <title>iMarket | Wish List Products</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./src/css/bootstrap.min.css" type="text/css">
@@ -87,8 +87,10 @@ $cartItemsHeart = $query->getWishes($_SESSION['id']);
                                             </td>
 
                                             <td class="shoping__cart__price">
-                                                <del>$<?php echo number_format($item['price_old'], 2); ?></del>
-                                                $<?php echo number_format($item['price_current'], 2); ?>
+                                                <?php if ((float) $item['price_old'] > 0): ?>
+                                                    <del><?= formatRwf($item['price_old']); ?></del>
+                                                <?php endif; ?>
+                                                <?= formatRwf($item['price_current']); ?>
                                             </td>
 
                                             <td class="shoping__cart__item__clo">

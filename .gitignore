@@ -3,6 +3,9 @@
 .env.*
 !.env.example
 
+# Generated administrator password (see includes/db-migrate.php)
+admin-initial-password.txt
+
 # Word lock files and documents
 ~$*
 *.docx
@@ -13,6 +16,14 @@
 .cursorindexingignore
 .DS_Store
 Thumbs.db
+
+# Working files used while building the KYC / VDD documents
+_tmp_*
+_tmp.pdf
+PAWAPAY-AUDITOR-ONLINE-CHECKS.md
+KYC-VDD-AUDIT-AND-REPLY.md
+PAWAPAY_SUBMISSION_REVIEW.md
+pawapay-documents/_preview/
 
 # Uploads and runtime
 *.log

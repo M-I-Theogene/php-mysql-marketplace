@@ -431,4 +431,6 @@ function appBaseUrl()
 
 require_once __DIR__ . '/includes/env.php';
 require_once __DIR__ . '/includes/company.php';
+require_once __DIR__ . '/includes/currency.php';
+require_once __DIR__ . '/includes/products.php';
 require_once __DIR__ . '/includes/db-migrate.php';

@@ -28,10 +28,20 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['session_token'])) {
     // address, so both columns are matched.
     $identifier = $query->escape($_COOKIE['username']);
 
-    $result = $query->select('accounts', 'id, role, username', "WHERE username = '$identifier' OR email = '$identifier'");
- 
+    $result = $query->select('accounts', 'id, role, username, status', "WHERE username = '$identifier' OR email = '$identifier'");
+
     if (!empty($result)) {
         $user = $result[0];
+
+        // A remembered session must not outlive a block placed on the account.
+        if (isset($user['status']) && $user['status'] === 'blocked') {
+            $_SESSION['loggedin'] = true;
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['id'] = $user['id'];
+            $_SESSION['role'] = $user['role'];
+            header("Location: ../blocked_page.php");
+            exit;
+        }
 
         $_SESSION['loggedin'] = true;
         $_SESSION['username'] = $user['username'];
@@ -61,6 +71,16 @@ if (isset($_POST['submit'])) {
         $user = $query->authenticate($username, $password, 'accounts');
 
         if ($user) {
+
+            // The guards inside /admin and /seller run after the session has been
+            // created, so a blocked account has to be stopped here as well.
+            if (isset($user[0]['status']) && $user[0]['status'] === 'blocked') {
+                $_SESSION['loggedin'] = true;
+                $_SESSION['id'] = $user[0]['id'];
+                $_SESSION['username'] = $user[0]['username'];
+                header("Location: ../blocked_page.php");
+                exit;
+            }
 
             $_SESSION['loggedin'] = true;
             $_SESSION['id'] = isset($user[0]['id']) ? $user[0]['id'] : null;
@@ -98,7 +118,7 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypadi Shop | Login</title>
-    <link rel="icon" href="../favicon.ico">
+    <?php include __DIR__ . '/../includes/favicon.php'; ?>
     <link rel="stylesheet" href="../src/css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

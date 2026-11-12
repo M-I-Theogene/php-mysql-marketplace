@@ -1,6 +1,7 @@
 <?php include './init.php'; $currentPage = basename($_SERVER['PHP_SELF']); ?>
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><title>Privacy Policy | Cypadi Shop</title>
+<?php include __DIR__ . '/includes/favicon.php'; ?>
 <link rel="stylesheet" href="./src/css/bootstrap.min.css"><link rel="stylesheet" href="./src/css/style.css"></head>
 <body><?php include './includes/header.php'; ?>
 <section class="shoping-cart spad"><div class="container">
@@ -8,7 +9,7 @@
 <p><strong>Cypadi Ltd</strong>, Kigali, Rwanda. Effective July 2026. This policy explains what personal data Cypadi Shop collects, why, and your rights over it.</p>
 
 <h5>1. Who is responsible for your data</h5>
-<p>Cypadi Ltd is the data controller for personal data processed through shop.cypadi.com. You can reach us at <a href="mailto:info@cypadi.com">info@cypadi.com</a> or +250 784 801 809.</p>
+<p>Cypadi Ltd is the data controller for personal data processed through <?= COMPANY_WEBSITE; ?>. You can reach us at <a href="mailto:<?= COMPANY_EMAIL; ?>"><?= COMPANY_EMAIL; ?></a> or <?= COMPANY_PHONE_SUPPORT; ?>.</p>
 
 <h5>2. What we collect</h5>
 <ul>

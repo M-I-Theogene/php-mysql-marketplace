@@ -638,8 +638,15 @@ ol {
 }
 
 .hero__search {
-	overflow: hidden;
+	/* Must stay visible so the category dropdown panel is not clipped */
+	overflow: visible;
 	margin-bottom: 30px;
+}
+
+.hero__search:after {
+	display: block;
+	clear: both;
+	content: "";
 }
 
 .hero__search__form {
@@ -651,17 +658,24 @@ ol {
 }
 
 .hero__search__form form .hero__search__categories {
-	width: 30%;
+	width: 34%;
 	float: left;
-	font-size: 16px;
+	height: 48px;
+	box-sizing: border-box;
+	line-height: 26px;
+	font-size: 15px;
 	color: #1c1c1c;
 	font-weight: 700;
-	padding-left: 18px;
-	padding-top: 11px;
+	padding: 11px 26px 11px 16px;
 	position: relative;
+	background: transparent;
+	border: none;
+	border-radius: 0;
+	z-index: 10;
 }
 
-.hero__search__form form .hero__search__categories:after {
+/* Vertical separator between the category picker and the search field */
+.hero__search__form form .hero__search__categories:before {
 	position: absolute;
 	right: 0;
 	top: 14px;
@@ -672,14 +686,76 @@ ol {
 	content: "";
 }
 
-.hero__search__form form .hero__search__categories span {
+/* Dropdown caret (the :after pseudo element is the arrow in nice-select) */
+.hero__search__form form .hero__search__categories:after {
 	position: absolute;
-	right: 14px;
-	top: 14px;
+	right: 16px;
+	top: 50%;
+	height: 5px;
+	width: 5px;
+	margin-top: -4px;
+	border-bottom: 2px solid #1c1c1c;
+	border-right: 2px solid #1c1c1c;
+	background: transparent;
+	opacity: 1;
+	content: "";
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+	-webkit-transform-origin: 66% 66%;
+	-ms-transform-origin: 66% 66%;
+	transform-origin: 66% 66%;
+	-webkit-transition: all 0.15s ease-in-out;
+	transition: all 0.15s ease-in-out;
+}
+
+.hero__search__form form .hero__search__categories.open:after {
+	-webkit-transform: rotate(-135deg);
+	-ms-transform: rotate(-135deg);
+	transform: rotate(-135deg);
+}
+
+/* nice-select renders the selected label in span.current - keep it inline */
+.hero__search__form form .hero__search__categories span.current {
+	position: static;
+	display: block;
+	max-width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	line-height: 26px;
+	color: #1c1c1c;
+}
+
+/* The dropdown panel */
+.hero__search__form form .hero__search__categories .list {
+	width: 100%;
+	max-height: 320px;
+	overflow-y: auto;
+	margin-top: 0;
+	top: 100%;
+	left: 0;
+	border-radius: 0;
+	background: #ffffff;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+	z-index: 99;
+}
+
+.hero__search__form form .hero__search__categories .list .option {
+	min-height: 20px;
+	line-height: 20px;
+	padding: 10px 18px;
+	font-weight: 400;
+	white-space: normal;
+}
+
+.hero__search__form form .hero__search__categories .list .option.selected {
+	font-weight: 700;
+	color: #f1b301;
 }
 
 .hero__search__form form input {
-	width: 70%;
+	width: 66%;
 	border: none;
 	height: 48px;
 	font-size: 16px;

@@ -27,7 +27,7 @@ if (isset($_POST['proceed_payment'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypadi Shop | Checkout</title>
-    <link rel="icon" href="./favicon.ico">
+    <?php include __DIR__ . '/includes/favicon.php'; ?>
     <link rel="stylesheet" href="./src/css/bootstrap.min.css">
     <link rel="stylesheet" href="./src/css/style.css">
 </head>
@@ -66,10 +66,10 @@ if (isset($_POST['proceed_payment'])) {
                 <p><strong>Phone:</strong> <?= htmlspecialchars($user['number']); ?></p>
                 <ul class="list-unstyled mt-3">
                     <?php foreach ($cartItems as $item): ?>
-                        <li><?= htmlspecialchars($item['name']); ?> × <?= (int) $item['number_of_products']; ?> — RWF <?= number_format($item['total_price']); ?></li>
+                        <li><?= htmlspecialchars($item['name']); ?> × <?= (int) $item['number_of_products']; ?> — <?= formatRwf($item['total_price']); ?></li>
                     <?php endforeach; ?>
                 </ul>
-                <h4 class="mt-3">Total: RWF <?= number_format($total); ?></h4>
+                <h4 class="mt-3">Total: <?= formatRwf($total); ?></h4>
             </div>
         </div>
     </div>

@@ -56,6 +56,10 @@ function countTable($table)
             </li>
 
             <li>
+                <a href="<?= $base; ?>search.php" class="<?= ($currentPage == 'search.php') ? 'active' : ''; ?>">Shop</a>
+            </li>
+
+            <li>
                 <a href="<?= $base; ?>heart.php" class="<?= ($currentPage == 'heart.php') ? 'active' : ''; ?>">Wish
                     List</a>
             </li>
@@ -67,16 +71,11 @@ function countTable($table)
         </ul>
     </nav>
     <div id="mobile-menu-wrap"></div>
-    <div class="header__top__right__social">
-        <a href="#"><i class="fa fa-facebook"></i></a>
-        <a href="#"><i class="fa fa-twitter"></i></a>
-        <a href="#"><i class="fa fa-linkedin"></i></a>
-        <a href="#"><i class="fa fa-pinterest-p"></i></a>
-    </div>
     <div class="humberger__menu__contact">
         <ul>
-            <li><i class="fa fa-envelope"></i> info@cypadi.com</li>
-            <li>Free delivery on orders over RWF 10,000</li>
+            <li><i class="fa fa-envelope"></i> <?= COMPANY_EMAIL; ?></li>
+            <li><i class="fa fa-phone"></i> <?= COMPANY_PHONE_SUPPORT; ?></li>
+            <li><i class="fa fa-map-marker"></i> <?= companyAddress(); ?></li>
         </ul>
     </div>
 </div>
@@ -88,19 +87,13 @@ function countTable($table)
                 <div class="col-lg-6">
                     <div class="header__top__left">
                         <ul>
-                            <li><i class="fa fa-envelope"></i> info@cypadi.com</li>
-                            <li>Free delivery on orders over RWF 10,000</li>
+                            <li><i class="fa fa-envelope"></i> <?= COMPANY_EMAIL; ?></li>
+                            <li><i class="fa fa-phone"></i> <?= COMPANY_PHONE_SUPPORT; ?></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="header__top__right">
-                        <div class="header__top__right__social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-linkedin"></i></a>
-                            <a href="#"><i class="fa fa-pinterest-p"></i></a>
-                        </div>
                         <div class="header__top__right__auth">
                             <?php if (!empty($_SESSION['loggedin'])): ?>
                                 <a href="#" onclick="logout()"><i class="fa fa-user"></i>Logout</a>
@@ -125,6 +118,10 @@ function countTable($table)
                     <ul>
                         <li>
                             <a href="<?= $base; ?>" class="<?= ($currentPage == 'index.php') ? 'active' : ''; ?>">Home</a>
+                        </li>
+
+                        <li>
+                            <a href="<?= $base; ?>search.php" class="<?= ($currentPage == 'search.php') ? 'active' : ''; ?>">Shop</a>
                         </li>
 
                         <li>
@@ -200,11 +197,15 @@ function countTable($table)
             <div class="col-lg-9">
                 <div class="hero__search">
                     <div class="hero__search__form">
-                        <form action="#">
-                            <div class="hero__search__categories">
-                                All Categories
-                            </div>
-                            <input type="text" placeholder="What do you need?">
+                        <form action="<?= $base; ?>search.php" method="get" role="search">
+                            <select name="category" class="hero__search__categories" aria-label="Category" style="border: none; background: transparent; outline: none;">
+                                <option value="0">All Categories</option>
+                                <?php foreach ($query->select('categories', 'id, category_name', 'ORDER BY category_name ASC') as $searchCategory): ?>
+                                    <option value="<?= (int) $searchCategory['id']; ?>"><?= htmlspecialchars($searchCategory['category_name'], ENT_QUOTES, 'UTF-8'); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <input type="text" name="q" placeholder="What do you need?" aria-label="Search products"
+                                value="<?= htmlspecialchars(isset($_GET['q']) ? (string) $_GET['q'] : '', ENT_QUOTES, 'UTF-8'); ?>">
                             <button type="submit" class="site-btn">SEARCH</button>
                         </form>
                     </div>
@@ -213,8 +214,8 @@ function countTable($table)
                             <i class="fa fa-phone"></i>
                         </div>
                         <div class="hero__search__phone__text">
-                            <h5>+250 784 801 809</h5>
-                            <span>Cypadi Shop — Rwanda</span>
+                            <h5><?= COMPANY_PHONE_SUPPORT; ?></h5>
+                            <span><?= COMPANY_LEGAL_NAME; ?> — Rwanda</span>
                         </div>
                     </div>
                 </div>

@@ -24,7 +24,7 @@ $product = $query->getProduct($product_id);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./favicon.ico">
+    <?php include __DIR__ . '/includes/favicon.php'; ?>
     <title>Product | <?php echo $product['name']; ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./src/css/bootstrap.min.css" type="text/css">
@@ -72,8 +72,10 @@ $product = $query->getProduct($product_id);
                     <div class="product__details__text">
                         <h3><?php echo $product['name']; ?></h3>
                         <div class="product-price">
-                            <div class="product__item__price">$<?php echo $product['price_current'] ?>
-                                <span>$<?php echo $product['price_old'] ?></span>
+                            <div class="product__item__price"><?= formatRwf($product['price_current']); ?>
+                                <?php if ((float) $product['price_old'] > 0): ?>
+                                    <span><?= formatRwf($product['price_old']); ?></span>
+                                <?php endif; ?>
                             </div>
                         </div>
 
@@ -149,8 +151,10 @@ $product = $query->getProduct($product_id);
                                 <h5><a
                                         onclick="openProductDetails(<?php echo $product_id; ?>)"><?php echo $product_name; ?></a>
                                 </h5>
-                                <div class="product__item__price">$<?php echo $price_current; ?>
-                                    <span>$<?php echo $price_old; ?></span>
+                                <div class="product__item__price"><?= formatRwf($price_current); ?>
+                                    <?php if ((float) $price_old > 0): ?>
+                                        <span><?= formatRwf($price_old); ?></span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

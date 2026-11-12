@@ -89,7 +89,8 @@ if ($status === 'approved') {
                         <p>
                             We will email you as soon as your account is approved. If you need to send additional
                             documents, or if the review is taking longer than expected, contact
-                            <a href="mailto:info@cypadi.com">info@cypadi.com</a> or call +250 784 801 809.
+                            <a href="mailto:<?= COMPANY_EMAIL; ?>"><?= COMPANY_EMAIL; ?></a> or call
+                            <a href="tel:<?= str_replace(' ', '', COMPANY_PHONE_SUPPORT); ?>"><?= COMPANY_PHONE_SUPPORT; ?></a>.
                         </p>
                     <?php endif; ?>
 

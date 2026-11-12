@@ -35,7 +35,7 @@ function kycDocumentFail($status, $heading, $message, $detail = '')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($heading); ?> | Cypadi Shop</title>
-    <link rel="icon" href="<?= htmlspecialchars(appBaseUrl()); ?>/favicon.ico">
+    <?php include __DIR__ . '/includes/favicon.php'; ?>
     <style>
         body {
             margin: 0;

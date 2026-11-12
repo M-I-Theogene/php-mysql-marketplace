@@ -13,7 +13,7 @@ $cartItems = $query->getCartItems($_SESSION['id']);
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" href="./favicon.ico">
+    <?php include __DIR__ . '/includes/favicon.php'; ?>
     <title>Shopping Cart</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./src/css/bootstrap.min.css" type="text/css">
@@ -99,8 +99,10 @@ $cartItems = $query->getCartItems($_SESSION['id']);
                                                 <h5><?php echo $item['name']; ?></h5>
                                             </td>
                                             <td class="shoping__cart__price">
-                                                <del>RWF <?php echo number_format($item['price_old'], 0); ?></del>
-                                                RWF <?php echo number_format($item['price_current'], 0); ?>
+                                                <?php if ((float) $item['price_old'] > 0): ?>
+                                                    <del><?= formatRwf($item['price_old']); ?></del>
+                                                <?php endif; ?>
+                                                <?= formatRwf($item['price_current']); ?>
                                             </td>
                                             <td class="shoping__cart__quantity">
                                                 <div class="quantity">
@@ -111,7 +113,7 @@ $cartItems = $query->getCartItems($_SESSION['id']);
                                                 </div>
                                             </td>
                                             <td class="shoping__cart__total">
-                                                RWF <?php echo number_format($item['total_price'], 0); ?>
+                                                <?= formatRwf($item['total_price']); ?>
                                             </td>
                                             <td class="shoping__cart__item__clo">
                                                 <span onclick="removeCartItem(<?php echo $item['id']; ?>)">
@@ -136,8 +138,8 @@ $cartItems = $query->getCartItems($_SESSION['id']);
                     <div class="shoping__checkout">
                         <h5>Cart Total</h5>
                         <ul>
-                            <li>Subtotal <span>RWF <?php echo number_format($total_price, 0); ?></span></li>
-                            <li>Total <span>RWF <?php echo number_format($total_price, 0); ?></span></li>
+                            <li>Subtotal <span><?= formatRwf($total_price); ?></span></li>
+                            <li>Total <span><?= formatRwf($total_price); ?></span></li>
                         </ul>
                         <a href="checkout.php" class="primary-btn">Proceed to Checkout</a>
                     </div>

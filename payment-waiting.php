@@ -14,6 +14,7 @@ if ($orderNumber === '' || $depositId === '') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypadi Shop | Confirming Payment</title>
+    <?php include __DIR__ . '/includes/favicon.php'; ?>
     <link rel="stylesheet" href="./src/css/bootstrap.min.css">
     <link rel="stylesheet" href="./src/css/style.css">
 </head>

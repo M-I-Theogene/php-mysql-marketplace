@@ -1,14 +1,14 @@
 <?php include 'init.php'; ?>
 
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Cypadi Shop - buy online in Rwanda. Pay with MTN MoMo or Airtel Money at checkout, delivered across Kigali and Rwanda.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" href="./favicon.ico">
+    <?php include __DIR__ . '/includes/favicon.php'; ?>
     <title>Cypadi Shop | Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./src/css/bootstrap.min.css" type="text/css">
@@ -32,7 +32,7 @@
                 <div class="col-lg-3 col-md-5">
                     <div class="sidebar">
                         <div class="sidebar__item">
-                            <h4>Categoriya</h4>
+                            <h4>Categories</h4>
                             <ul>
                                 <?php
                                 $categories = $query->select('categories', '*');
@@ -89,19 +89,18 @@
                                     $products = $query->select('products', '*', 'WHERE category_id = ' . $category['id'] . ' LIMIT 6');
 
                                     foreach ($products as $product):
-                                        $product_name = $product['name'];
-                                        $category_name = $category['category_name'];
-                                        ;
+                                        $product_name = productDisplayName($product['name']);
+                                        $category_name = productDisplayName($category['category_name']);
                                         $price_current = $product['price_current'];
                                         $price_old = $product['price_old'];
                                         $product_id = $product['id'];
-                                        $image = $query->select('product_images', 'image_url', "where product_id = '$product_id'")[0]['image_url'];
+                                        $image = productPrimaryImage($query, (int) $product_id);
                                         ?>
 
                                         <div class="col-lg-4">
                                             <div class="product__discount__item">
                                                 <div class="product__discount__item__pic set-bg"
-                                                    data-setbg="./src/images/products/<?php echo $image ?>">
+                                                    <?= productTileBackground($image) ?>>
                                                     <ul class="product__item__pic__hover">
                                                         <li><a onclick="addToWishlist(<?php echo $product_id; ?>)"><i
                                                                     class="fa fa-heart"></i></a></li>
@@ -116,8 +115,10 @@
                                                     <h5><a
                                                             onclick="openProductDetails(<?php echo $product_id; ?>)"><?php echo $product_name; ?></a>
                                                     </h5>
-                                                    <div class="product__item__price">RWF <?php echo number_format((float) $price_current); ?>
-                                                        <span>RWF <?php echo number_format((float) $price_old); ?></span>
+                                                    <div class="product__item__price"><?= formatRwf($price_current); ?>
+                                                        <?php if ((float) $price_old > 0): ?>
+                                                            <span><?= formatRwf($price_old); ?></span>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -128,46 +129,37 @@
                             </div>
                         </div>
                     <?php endforeach; ?>
-                    <?php $homeProducts = $query->select('products', '*', 'LIMIT 15'); ?>
+                    <?php
+                    $homeProducts = $query->select('products', '*', 'ORDER BY id DESC LIMIT 15');
+                    $totalProducts = productCount($query);
+                    ?>
                     <div class="filter__item">
                         <div class="row">
-                            <div class="col-lg-4 col-md-5">
-                                <div class="filter__sort">
-                                    <span>Sort By</span>
-                                    <select>
-                                        <option value="0">Default</option>
-                                        <option value="0">Default</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4">
+                            <div class="col-lg-8 col-md-7">
                                 <div class="filter__found">
-                                    <h6><span><?php echo count($homeProducts); ?></span> Products found</h6>
+                                    <h6><span><?= $totalProducts; ?></span> <?= $totalProducts === 1 ? 'product' : 'products'; ?> in the catalogue</h6>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-3">
-                                <div class="filter__option">
-                                    <span class="icon_grid-2x2"></span>
-                                    <span class="icon_ul"></span>
-                                </div>
+                            <div class="col-lg-4 col-md-5 text-right">
+                                <a href="<?= appBaseUrl(); ?>/category.php" class="site-btn">Browse all products</a>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <?php
                         foreach ($homeProducts as $product):
-                            $product_name = $product['name'];
-                            $category_name = $query->select('categories', 'category_name', 'WHERE id=' . $product['category_id'])[0]['category_name'];
+                            $product_name = productDisplayName($product['name']);
+                            $category_name = productCategoryName($query, $product['category_id']);
                             $price_current = $product['price_current'];
                             $price_old = $product['price_old'];
                             $product_id = $product['id'];
-                            $image = $query->select('product_images', 'image_url', "where product_id = '$product_id'")[0]['image_url'];
+                            $image = productPrimaryImage($query, (int) $product_id);
                             ?>
 
                             <div class="col-lg-4">
                                 <div class="product__discount__item">
                                     <div class="product__discount__item__pic set-bg"
-                                        data-setbg="./src/images/products/<?php echo $image ?>">
+                                        <?= productTileBackground($image) ?>>
                                         <ul class="product__item__pic__hover">
                                             <li><a onclick="addToWishlist(<?php echo $product_id; ?>)"><i
                                                         class="fa fa-heart"></i></a></li>
@@ -182,8 +174,10 @@
                                         <h5><a
                                                 onclick="openProductDetails(<?php echo $product_id; ?>)"><?php echo $product_name; ?></a>
                                         </h5>
-                                        <div class="product__item__price">RWF <?php echo number_format((float) $price_current); ?>
-                                            <span>RWF <?php echo number_format((float) $price_old); ?></span>
+                                        <div class="product__item__price"><?= formatRwf($price_current); ?>
+                                            <?php if ((float) $price_old > 0): ?>
+                                                <span><?= formatRwf($price_old); ?></span>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>

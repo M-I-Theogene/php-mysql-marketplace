@@ -40,7 +40,9 @@ if (isset($_POST['submit'])) {
     } else {
         $orderno = (string) mt_rand(100000000, 999999999);
         $userid = (int) $_SESSION['id'];
-        $totalamount = (float) $_SESSION['gtotal'];
+        // Whole francs: the orders column is an integer amount and PawaPay is
+        // sent the same figure, so no rounding can happen between the two.
+        $totalamount = rwfRound($_SESSION['gtotal']);
         $provider = trim($_POST['provider'] ?? '');
         $phoneNumber = pawapayNormalizePhone(trim($_POST['phone'] ?? ''), $countryPrefix);
 
@@ -114,6 +116,7 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypadi Shop | Pay with Mobile Money</title>
+    <?php include __DIR__ . '/includes/favicon.php'; ?>
     <link rel="stylesheet" href="./src/css/bootstrap.min.css">
     <link rel="stylesheet" href="./src/css/style.css">
     <link rel="stylesheet" href="./src/css/payment.css">
@@ -132,7 +135,7 @@ if (isset($_POST['submit'])) {
             <div class="col-md-4">
                 <div class="payment-summary-box">
                     <p>Amount to pay</p>
-                    <h2>RWF <?= number_format((float) $_SESSION['gtotal']); ?></h2>
+                    <h2><?= formatRwf($_SESSION['gtotal']); ?></h2>
                 </div>
             </div>
             <div class="col-md-8">

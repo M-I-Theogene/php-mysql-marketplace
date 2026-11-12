@@ -3,16 +3,13 @@
  * The company's legal identity, in one place.
  *
  * The footer, the Terms, the Privacy Policy, About, Contact and the Refund
- * policy all print these values. Keeping them here means the RDB number and
- * the registered address can never disagree between pages — which is the
- * inconsistency a payment provider's reviewer looks for first.
+ * policy all print these values. Keeping them here means the registered
+ * address can never disagree between pages — which is the inconsistency a
+ * payment provider's reviewer looks for first.
  */
 
-/** Registered legal name, exactly as it appears on the RDB certificate. */
+/** Registered legal name. */
 const COMPANY_LEGAL_NAME = 'Cypadi Ltd';
-
-/** RDB certificate of domestic company registration. */
-const COMPANY_RDB = '123088034';
 
 /**
  * RRA Tax Identification Number.
@@ -28,11 +25,14 @@ const COMPANY_ADDRESS_LINE = 'Kimironko, Gasabo';
 const COMPANY_CITY = 'Kigali';
 const COMPANY_COUNTRY = 'Rwanda';
 
-/** Customer support — orders, delivery, refunds. */
-const COMPANY_PHONE_SUPPORT = '+250 784 801 809';
-
-/** Management and compliance contact. */
-const COMPANY_PHONE_OFFICE = '+250 792 359 800';
+/**
+ * Customer support — orders, delivery, refunds, compliance.
+ *
+ * The one number Cypadi publishes. It is the same number that appears in the
+ * signature block of the KYC and vendor due diligence documents, so a reviewer
+ * comparing the paperwork with the site sees one number, not two.
+ */
+const COMPANY_PHONE_SUPPORT = '+250 792 359 800';
 
 const COMPANY_EMAIL = 'info@cypadi.com';
 const COMPANY_EMAIL_COMPLIANCE = 'compliance@cypadi.com';
@@ -42,13 +42,13 @@ const COMPANY_WEBSITE = 'shop.cypadi.com';
 
 /**
  * The legal identity as a single line, e.g.
- * "Cypadi Ltd · RDB 123088034 · TIN 123456789 · Kimironko, Gasabo, Kigali, Rwanda"
+ * "Cypadi Ltd · TIN 123456789 · Kimironko, Gasabo, Kigali, Rwanda"
  *
  * The TIN is omitted while COMPANY_TIN is empty.
  */
 function companyLegalLine(): string
 {
-    $parts = [COMPANY_LEGAL_NAME, 'RDB ' . COMPANY_RDB];
+    $parts = [COMPANY_LEGAL_NAME];
 
     if (COMPANY_TIN !== '') {
         $parts[] = 'TIN ' . COMPANY_TIN;

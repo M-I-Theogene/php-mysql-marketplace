@@ -1,404 +1,113 @@
-prompt:
+8/11.htaccess — block .git, pawapay-documents, _tmp, previews
 
-please want i want is to make the reply but firslty assure me that these @"/KYC and AML Policy (Final).docx"  and @"/Vendor Due Diligence Procedures (Final).docx"  are truelly strong and be accepted strong e.g are they having the company logo ? does it have the company stamp please check for me
+Create includes/company.php (single source for legal identity)
 
+Wire company.php + products.php into config.php
 
+includes/footer.php — RDB, address, legal line
 
-3/7Verify available logo assets / any stamp file
+index.php — product count, sidebar heading, image guards
 
-Inspect both .docx files: embedded images (logo/stamp), structure
+search.php — real catalogue search
 
-Extract and review full text of both documents
+includes/header.php — wire search, remove dead socials
 
-Review prior PawaPay submission review for context
+terms.php, about-us.php, contact-us.php — legal identity
 
-Verify available logo assets / any stamp file
+refund-policy.php — full policy
 
-Give verdict on logo, stamp, signature block
+.htaccess — block .git, pawapay-documents, _tmp, previews
 
-Advise on content gaps and strength
+Admin credentials — replace seeded account
 
-Provide the reply emai
+Load every page, confirm no PHP errors
 
-another prompt given was:
-
-i want to change the logo on the docx to use this https://cypadi.com/logo/cypadi_trancyparent_logo.png
-
-then the progress becomed:
-
-
-2/5
-Build script: fetch logo, write HTML, convert to .docx + PDF
-Confirm: no logo, no stamp, no signature in either original .docx
-Verify document claims against the current codebase
-Build script: fetch logo, write HTML, convert to .docx + PDF
-Verify logo embedded and PDFs render
-Deliver verdict + reply email
-
-
-then prompt becomed:
-2/7Generate KYC policy source file
-
-Confirm: no logo, no stamp, no signature in either original .docx
-
-Verify document claims against the current codebase
-
-Generate KYC policy source file
-
-Generate Vendor DD source file
-
-Convert both to .docx + PDF with logo header and page numbers
-
-Verify logo embedded and PDFs render
-
-Deliver verdict + reply email
-
-then new prompt becomed:
-given that our progress was @/current_ai-progress.txt , but i am very wondering of some correction we can make it so that we can continue our progress sofar @/KYC-VDD-AUDIT-AND-REPLY.md  i am not agreeing with these thing i want them to be removed, Two points I would be grateful for your guidance on this section it is not needed please, and also RDB Certificate of Company Registration — CYPADI LTD
- please this is not necessary to be attached as you wrote it because we already passed this phase we have already uploaded while we are at initial stage of onboarding 
 
 then the progress becamed:
+6/8Verify KYC/VDD docx (logo, stamp, signature, placeholders) and pdfs
 
-4/5Verify the file reads cleanly end to end
+Read company.php, config.php, footer.php, header.php, .htaccess
 
-Remove the RDB Certificate attachment line and renumber remaining attachments
+Read the five legal pages + index.php + search.php
 
-Remove the "Two points I would be grateful for your guidance on" section from the ready-to-send reply
+Confirm the seeded admin account was replaced (db-migrate.php)
 
-Move the callback-URL and signed-callback findings into an internal section outside the email
+PHP syntax-check every page (28/28 clean)
 
-Fix the missing blank line before the section divider after §3
+Start MySQL; Apache already listening on port 81
 
-Verify the file reads cleanly end to end
+HTTP smoke test: all pages 200, blocked paths 403, no PHP errors
+
+Verify KYC/VDD docx (logo, stamp, signature, placeholders) and pdfs
+
+Report what is finished vs still missing
 
 
+then it becomed:
+5/9Verify no file depends on db-migrate.php without company.php loaded
+
+Skip document verification (KYC/VDD docx + PDF) as instructed
+
+Confirm includes/company.php, config.php wiring, footer, header, .htaccess
+
+Confirm legal pages (terms, about, contact, refund, privacy)
+
+Confirm index.php and search.php
+
+Confirm admin credential seeding rewrite
+
+Verify no file depends on db-migrate.php without company.php loaded
+
+Lint every PHP file
+
+Load every page over HTTP and confirm no PHP error
+
+Report finished vs still missing
+
+
+then the progress becomes:
+0/4Diagnose why a normal customer cannot log in
+
+Diagnose why a normal customer cannot log in
+
+Fix the login defect
+
+Verify with a real HTTP login test
+
+Resume the paused local-correction work
+
+
+then the new prompt becomed:
+as our target is to convice the pawapay auditors please help us and @/current_ai-progress.txt  , please i  what you to continue but before continuing the prices are not real they are fake please update them so that it can look more professional please match the current market in Rwanda
+but also remeber i had an issue on product detials page it is displaying in usd but it must be in RWF please 
+and also it is just simple you need to also convert  those usd to rwf currency exachange because we just change the currency on the homepage or whatever page and then we forgotted to convert by using exchange rate but one thing is clear all it must be updated in the database we must use the rwf only also in the detials page whatever please help me to do it
 
 
 prompt:
-given that our progress was @/current_ai-progress.txt , but i am very wondering of some correction we can make it so that we can continue our progress sofar @/KYC-VDD-AUDIT-AND-REPLY.md  i am not agreeing with these thing i want them to be removed, Two points I would be grateful for your guidance on this section it is not needed please, and also RDB Certificate of Company Registration — CYPADI LTD
- please this is not necessary to be attached as you wrote it because we already passed this phase we have already uploaded while we are at initial stage of onboarding
+please you overcomplicating in this site please remove the RDB NUMBER every where it isbeing used in this site it is not needed please continue http://localhost:81/shopping/   remove the rdb number here it is not needed please  also by using the site logo please replace the exisitng favicon in the tab with the real site logo
 
-then the progress becommed:
+progress:
 
+1/4Remove RDB number display and related logic (frontend + admin/seller + legal pages)
 
-4/7Build both .docx with logo header, footer page numbers, document control and signature block
+Locate every RDB number usage across the site
 
-Verify Word COM, logo file and output folder are usable
+Remove RDB number display and related logic (frontend + admin/seller + legal pages)
 
-Read the real approval gate (signup fields, seller_status, admin review, document streaming)
+Replace favicon in tab with the real site logo
 
-Compose the KYC and AML Policy (v1.1) document body
-
-Compose the Vendor Due Diligence Procedures (v1.1) document body
-
-Build both .docx with logo header, footer page numbers, document control and signature block
-
-Verify page counts, header logo and placeholders in the generated files
-
-Report the remaining placeholders you must fill before printing
-
-
-then the progress becomed:
-
-5/9Diagnose the header picture sizing failure
-
-Verify Word COM, logo file and output folder are usable
-
-Read the real approval gate (signup fields, seller_status, admin review, document streaming)
-
-Compose the KYC and AML Policy (v1.1) document body
-
-Compose the Vendor Due Diligence Procedures (v1.1) document body
-
-Fix internal section cross-references
-
-Diagnose the header picture sizing failure
-
-Build both .docx and .pdf with logo header, footer page numbers, document control and signature block
-
-Verify page counts, header logo and placeholders in the generated files
-
-Report the remaining placeholders you must fill before printing
-
-
-then it becomed:
-1/5Diagnose the Word build hang
-
-Compose both document bodies and fix cross-references
-
-Diagnose the Word build hang
-
-Build both .docx and .pdf with logo header, footer page numbers, document control and signature block
-
-Verify page counts, header logo and placeholders in the generated files
-
-Report the remaining placeholders you must fill before printing
-
-
-
-then it becomed:
-1/5Diagnose the Word build hang
-
-Compose both document bodies and fix cross-references
-
-Diagnose the Word build hang
-
-Build both .docx and .pdf with logo header, footer page numbers, document control and signature block
-
-Verify page counts, header logo and placeholders in the generated files
-
-Report the remaining placeholders you must fill before printing
-
-given the prompt:
-
-
-
-then the progress becomed:
-3/8Read VDD source HTML to confirm markup
-
-Compose both document bodies and fix cross-references
-
-Diagnose the Word build hang (raw-HTML open crashes Word)
-
-Inspect existing python builders (render module incomplete, parser incomplete)
-
-Read VDD source HTML to confirm markup
-
-Write complete python-docx builder
-
-Convert both .docx to .pdf with Word
-
-Verify page counts, header logo and placeholders
-
-Report remaining placeholders before printing
-
-
-
-then the progress becomed:
-2/5Fix element order so borders/shading survive Word
-
-Build .docx and .pdf for both documents
-
-Visually inspect page 1 (found: gold rules dropped by Word)
-
-Fix element order so borders/shading survive Word
-
-Rebuild, re-render and re-verify all pages
-
-Report remaining placeholders before printing
-
-
-then the progress becomed:
-1/4Confirm whether paragraph borders reach the PDF
-
-Rebuild .docx and .pdf
-
-Confirm whether paragraph borders reach the PDF
-
-Verify all pages visually
-
-Report placeholders
+Verify pages render with no errors
 
 
 then it becomed:
 
-1/4Enumerate remaining placeholders
+0/4Scan codebase for all RDB number usages
 
-Both PDFs regenerated with gold rules
+Scan codebase for all RDB number usages
 
-Enumerate remaining placeholders
+Remove RDB number display and logic (frontend, admin, seller, legal pages)
 
-Verify remaining pages
+Replace favicon in tab with real site logo
 
-Deliver verdict + reply email
+Verify pages render with no errors
 
-
-then it becomed:
-
-2/5Rebuild and reconvert both documents
-
-Added cantSplit + repeating header rows
-
-Wired row properties into table rendering
-
-Rebuild and reconvert both documents
-
-Re-render and verify all pages
-
-Deliver verdict + reply email
-
-
-prompt:
-please given that i have given to you @/pawapay-documents/sign.png  and @/pawapay-documents/stamp.png  and also @"/pawapay-documents/CYPADI Ltd.pdf"  i hope you are going to remove those placeholders with these  acooridngly
-
-given that we 
-
-then the prompt becamed:
-
-3/5Rebuild .docx + .pdf
-
-Extracted RDB 123088034, address, MD Pacifique MASENGESHO
-
-Wired real values via DOC_VALUES substitution
-
-Embedded signature and stamp images
-
-Rebuild .docx + .pdf
-
-Verify placeholders gone and signature page renders 
-
-the progress becomed:
-4/6Re-render and visually verify all pages
-
-Verify build artefacts, placeholders, embedded images
-
-Confirm signature + stamp images embedded on signature page
-
-Diagnose: ScreenUpdating=$false stripped paragraph borders on export
-
-Convert with clean converter — 27 gold rules per document
-
-Re-render and visually verify all pages
-
-Deliver verdict + reply email
-
-prompt given:
-
-given that we were doing @/current_ai-progress.txt  , this •	a single order exceeds RWF 500,000;
-•	cumulative purchases exceed RWF 2,000,000 within a rolling period of thirty (30) days;
- it is over-rated i think it is better to remove it is not realistic because a customer can make a single product and exceeds that kind of moany 500,000 e.g can buy I IPHONE 18 ,...... TVS,.....
-
-then the progress becomed:
-
-6/7Verify the rebuilt documents
-
-Locate the RWF 500,000 / RWF 2,000,000 thresholds in the document sources
-
-Replace the value-based EDD triggers with risk-based wording (review-only at RWF 5,000,000 / 10,000,000)
-
-Remove the leftover "EDD threshold" and "RWF 1,000,000 a month" references
-
-Confirm no stale money thresholds remain in either source
-
-Rebuild .docx
-
-Convert to .pdf
-
-Verify the rebuilt documents
-
-
-then it becamed:
-
-3/5Verify the rendered PDFs
-
-Replace the value-based EDD triggers with risk-based wording
-
-Remove leftover threshold references in both sources
-
-Rebuild both .docx and .pdf
-
-Verify the rendered PDFs
-
-Update KYC-VDD-AUDIT-AND-REPLY.md to match
-
-
-then it becomed:
-
-5/6Visually verify the rebuilt §5.2 page
-
-Remove the RWF 500,000 / RWF 2,000,000 EDD triggers from the KYC policy
-
-Replace with risk-based EDD indicators + review-only RWF 5,000,000 / 10,000,000
-
-Rebuild both .docx and .pdf
-
-Verify the rendered PDF text
-
-Update KYC-VDD-AUDIT-AND-REPLY.md to match
-
-Visually verify the rebuilt §5.2 page
-
-
-prompt:
-there is an issue in the word document @"/KYC and AML Policy (Final).docx"  there is a page which is almost empty it must be dismissed
-
-progress becamed:
-3/5Rebuild both .docx and .pdf
-
-Remove the unrealistic RWF 500,000 / RWF 2,000,000 EDD triggers
-
-Replace the break paragraph with pageBreakBefore on the Approval heading
-
-Keep the Approval heading, sentence and signature table on one page
-
-Rebuild both .docx and .pdf
-
-Verify page counts and that no page is blank
-
-then it becomed:
-3/5Convert to .pdf
-
-Remove the unrealistic RWF 500,000 / RWF 2,000,000 EDD triggers
-
-Replace the break paragraph with pageBreakBefore on the Approval heading
-
-Keep the Approval heading, sentence and signature table on one page
-
-Convert to .pdf
-
-Verify page counts and that no page is blank
-
-
-then it becomed:
-4/5Diagnose why the signature table leaves the Approval page
-
-Remove the unrealistic RWF 500,000 / RWF 2,000,000 EDD triggers
-
-Replace the break paragraph with pageBreakBefore on the Approval heading
-
-Rebuild both .docx and .pdf
-
-Measure text volume per page — KYC p7 still blank, VDD fine
-
-Diagnose why the signature table leaves the Approval p
-
-
-then it becomed:
-
-3/5Tighten heading spacing so §17 ends on page 6
-
-Remove the unrealistic RWF 500,000 / RWF 2,000,000 EDD triggers
-
-Replace the break paragraph with pageBreakBefore on the Approval heading
-
-Diagnose: page 7 is an orphan of §17, not a stray break
-
-Tighten heading spacing so §17 ends on page 6
-
-Rebuild, reconvert and re-measure every page
-
-
-
-then it becomes:
-
-4/6Visually confirm KYC p6 and p7
-
-Remove the unrealistic RWF 500,000 / RWF 2,000,000 EDD triggers
-
-Diagnose the near-empty page: §17 overflow, not the approval block
-
-Tighten h2 spacing — KYC now 7 pages, no blank page
-
-Rebuild and re-measure every page
-
-Visually confirm KYC p6 and p7
-
-Update page counts in the audit/reply file
-
-
-
-then the prompt:
-before I submit this application please make another .md which includes what primary the auditor or the approver on pawapay board can test or verify or search online what popular think do you think they can go and look accordingly to the this site of @shopping i tend to host on the subdomain of shop.cypadi.com , please make the checklist and asseess but pleaase remember look the priority the one common that the auditor can verify incase he get's interested to see that domain
-
-the progress becamed:
-.....
